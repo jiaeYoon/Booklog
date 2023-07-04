@@ -9,11 +9,11 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
-public class Account extends BaseTimeEntity {
+public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long accountId;
+    private Long userId;
 
     @Column(columnDefinition = "varchar(30)", nullable = false)
     private String name;
