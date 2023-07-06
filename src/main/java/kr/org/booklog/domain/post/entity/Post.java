@@ -2,12 +2,13 @@ package kr.org.booklog.domain.post.entity;
 
 import com.sun.istack.NotNull;
 import kr.org.booklog.domain.user.entity.User;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor
@@ -35,13 +36,13 @@ public class Post {
     private String bookWriter;
 
     @NotNull
-    private LocalDateTime readStart;
+    private LocalDate readStart;
 
     @NotNull
-    private LocalDateTime readEnd;
+    private LocalDate readEnd;
 
     @NotNull
-    private LocalDateTime postAt;
+    private LocalDate postAt;
 
     @NotNull
     @Column(columnDefinition = "tinyint")
@@ -59,7 +60,19 @@ public class Post {
     @ColumnDefault("0")
     private Integer commentsCnt;
 
-    public void setUser(User user) {
+    @Builder
+    public Post(User user, String postTitle, String bookTitle, String bookWriter,
+                LocalDate readStart, LocalDate readEnd, LocalDate postAt,
+                          Integer rating, String content) {
         this.user = user;
+        this.postTitle = postTitle;
+        this.bookTitle = bookTitle;
+        this.bookWriter = bookWriter;
+        this.readStart = readStart;
+        this.readEnd = readEnd;
+        this.postAt = postAt;
+        this.rating = rating;
+        this.content = content;
     }
+
 }
