@@ -17,7 +17,7 @@ public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long postId;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -62,8 +62,7 @@ public class Post {
 
     @Builder
     public Post(User user, String postTitle, String bookTitle, String bookWriter,
-                LocalDate readStart, LocalDate readEnd, LocalDate postAt,
-                          Integer rating, String content) {
+                LocalDate readStart, LocalDate readEnd, LocalDate postAt, Integer rating, String content) {
         this.user = user;
         this.postTitle = postTitle;
         this.bookTitle = bookTitle;
