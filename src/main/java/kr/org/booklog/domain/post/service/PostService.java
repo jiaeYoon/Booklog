@@ -66,4 +66,10 @@ public class PostService {
         post.updatePost(requestDto);
         return id;
     }
+
+    public void delete(Long id) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id = "+ id));
+        postRepository.delete(post);
+    }
 }
