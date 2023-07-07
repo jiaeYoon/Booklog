@@ -1,5 +1,7 @@
 package kr.org.booklog.domain.post.service;
 
+import kr.org.booklog.domain.like.entity.Likes;
+import kr.org.booklog.domain.like.repository.LikesRepository;
 import kr.org.booklog.domain.post.dto.PostRequestDto;
 import kr.org.booklog.domain.post.dto.PostResponseDto;
 import kr.org.booklog.domain.post.dto.PostTotalResponseDto;
@@ -20,11 +22,13 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final LikesRepository likesRepository;
 
     @Autowired
-    public PostService(PostRepository postRepository, UserRepository userRepository) {
+    public PostService(PostRepository postRepository, UserRepository userRepository, LikesRepository likesRepository) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
+        this.likesRepository = likesRepository;
     }
 
     public Long save(PostRequestDto requestDto) {
@@ -43,11 +47,15 @@ public class PostService {
         return responseDto;
     }
 
-    public PostResponseDto findById(Long id) {
+    public PostResponseDto findById(Long id, Long userId) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id = " + id));
-
         PostResponseDto responseDto = new PostResponseDto(post);
+        
+        // 게시글의 좋아요 여부 조회
+        Likes likes = likesRepository.findByUserIdAndPostId(userId, post.getId())
+                .orElse(new Likes(Boolean.FALSE));
+        responseDto.setIsLike(likes.getIsLike());
 
         return responseDto;
     }
