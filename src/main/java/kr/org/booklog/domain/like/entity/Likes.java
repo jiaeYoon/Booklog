@@ -35,4 +35,10 @@ public class Likes extends BaseTimeEntity {
         this.post = post;
         this.isLike = isLike;
     }
+
+    public Likes(Boolean isLike) {
+        this.user = new User();
+        this.post = new Post();
+        this.isLike = isLike;
+    }
 }
