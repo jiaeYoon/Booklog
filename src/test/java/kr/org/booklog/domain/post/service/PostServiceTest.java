@@ -135,4 +135,26 @@ class PostServiceTest {
         assertThat(postRepository.findById(updatedId).get().getBookTitle()).isEqualTo("테스트");
         assertThat(postRepository.findById(updatedId).get().getRating()).isEqualTo(1);
     }
+
+    @Test
+    void 게시글_삭제() {
+
+        //given
+        User user1 = new User("tname", "tpw", "tnickname", "temail@gmail.com", OAuthType.GOOGLE);
+        userRepository.save(user1);
+
+        Long post1Id = postService.save(new PostRequestDto(user1.getId(), "테스트를 읽고...", "테스트", "zzyoon",
+                LocalDate.of(2023, 5, 14), LocalDate.of(2023, 6, 14), LocalDate.of(2023, 6, 14),
+                4, "감상평 테스트1"));
+
+        Long post2Id = postService.save(new PostRequestDto(user1.getId(), "테스트를 읽고...", "테스트", "zzyoon",
+                LocalDate.of(2023, 5, 14), LocalDate.of(2023, 6, 14), LocalDate.of(2023, 6, 14),
+                4, "감상평 테스트2"));
+
+        // when
+        postService.delete(post1Id);
+
+        //then
+        assertThat(postRepository.findAll().size()).isEqualTo(1);
+    }
 }
