@@ -59,8 +59,8 @@ class LikesServiceTest {
         requestDto2.setPostId(postId);
 
         //when
-        Long likesId = likesService.saveLikes(postId, requestDto1);
-        Long likesId2 = likesService.saveLikes(postId, requestDto2);
+        Long likesId = likesService.save(postId, requestDto1);
+        Long likesId2 = likesService.save(postId, requestDto2);
 
         //then
         Likes like = likesRepository.findById(likesId).get();

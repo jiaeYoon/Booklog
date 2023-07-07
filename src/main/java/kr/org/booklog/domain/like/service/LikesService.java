@@ -24,7 +24,7 @@ public class LikesService {
         this.postRepository = postRepository;
     }
 
-    public Long saveLikes(Long postId, LikesSaveRequestDto requestDto) {
+    public Long save(Long postId, LikesSaveRequestDto requestDto) {
 
         Long userId = requestDto.getUserId();
         User user = userRepository.findById(userId)
