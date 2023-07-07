@@ -102,15 +102,18 @@ class PostServiceTest {
         postRepository.save(post);
 
         //when
-        likesService.saveLikes(post.getId(), new LikesSaveRequestDto(user1.getId(), post.getId()));
+        likesService.save(post.getId(), new LikesSaveRequestDto(user1.getId(), post.getId()));
         PostResponseDto responseDto1 = postService.findById(post.getId(), user1.getId());
         PostResponseDto responseDto2 = postService.findById(post.getId(), user2.getId());
 
         //then
         assertThat(responseDto1.getIsLike()).isEqualTo(Boolean.TRUE);   // 좋아요 누른 사람의 좋아요 여부가 TRUE인지 확인
-        assertThat(responseDto2.getIsLike()).isEqualTo(Boolean.FALSE);  // 좋아요 누르지 않은 사람의 좋아요 여부가 FALSE인지 확인
+        assertThat(responseDto1.getLikeId()).isNotEqualTo(null);
         assertThat(responseDto1.getLikesCnt()).isEqualTo(1);
         assertThat(responseDto1.getPostTitle()).isEqualTo("테스트를 읽고...");
+
+        assertThat(responseDto2.getIsLike()).isEqualTo(Boolean.FALSE);  // 좋아요 누르지 않은 사람의 좋아요 여부가 FALSE인지 확인
+        assertThat(responseDto2.getLikeId()).isEqualTo(null);
     }
 
     @Test

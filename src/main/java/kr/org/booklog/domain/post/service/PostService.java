@@ -55,6 +55,7 @@ public class PostService {
         // 게시글의 좋아요 여부 조회
         Likes likes = likesRepository.findByUserIdAndPostId(userId, post.getId())
                 .orElse(new Likes(Boolean.FALSE));
+        responseDto.setLikeId(likes.getId());
         responseDto.setIsLike(likes.getIsLike());
 
         return responseDto;

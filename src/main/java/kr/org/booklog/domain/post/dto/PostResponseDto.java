@@ -19,6 +19,7 @@ public class PostResponseDto {
     private LocalDate postAt;
     private Integer rating;
     private String content;
+    private Long likeId;
     private Boolean isLike;
     private Integer likesCnt;
     private Integer commentsCnt;
