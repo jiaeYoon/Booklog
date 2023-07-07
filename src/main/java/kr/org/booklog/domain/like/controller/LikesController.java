@@ -20,4 +20,9 @@ public class LikesController {
     public Long save(@PathVariable Long postId, @RequestBody LikesSaveRequestDto requestDto) {
         return likesService.saveLikes(postId, requestDto);
     }
+
+    @DeleteMapping("/posts/{id}/likes")
+    public void delete(@PathVariable Long postId, @RequestParam Long likeId) {
+        likesService.delete(postId, likeId);
+    }
 }
