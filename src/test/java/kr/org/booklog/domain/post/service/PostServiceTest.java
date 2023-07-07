@@ -5,6 +5,9 @@ import kr.org.booklog.domain.post.dto.PostTotalResponseDto;
 import kr.org.booklog.domain.post.entity.Post;
 import kr.org.booklog.domain.post.repository.PostRepository;
 
+import kr.org.booklog.domain.user.entity.OAuthType;
+import kr.org.booklog.domain.user.entity.User;
+import kr.org.booklog.domain.user.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,14 +23,18 @@ import static org.assertj.core.api.Assertions.*;
 class PostServiceTest {
 
     @Autowired PostRepository postRepository;
+    @Autowired UserRepository userRepository;
     @Autowired PostService postService;
 
     @Test
     void 게시글_저장() {
 
         //given
+        User user = new User("tname", "tpw", "tnickname", "temail@gmail.com", OAuthType.GOOGLE);
+        userRepository.save(user);
+
         PostRequestDto requestDto = new PostRequestDto();
-        requestDto.setUserId(1L);
+        requestDto.setUserId(user.getId());
         requestDto.setPostTitle("이방인을 읽고...");
         requestDto.setBookTitle("이방인");
         requestDto.setBookWriter("알베르 카뮈");
@@ -50,9 +57,12 @@ class PostServiceTest {
     void 전체_게시글_조회() {
 
         //given
+        User user = new User("tname", "tpw", "tnickname", "temail@gmail.com", OAuthType.GOOGLE);
+        userRepository.save(user);
+
         for (int i = 0; i < 3; i++) {
             postService.save(PostRequestDto.builder()
-                .userId(1L)
+                .userId(user.getId())
                 .postTitle("테스트를 읽고...")
                 .bookTitle("테스트")
                 .bookWriter("zzyoon")
