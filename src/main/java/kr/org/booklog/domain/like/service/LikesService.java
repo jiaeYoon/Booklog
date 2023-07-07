@@ -1,6 +1,7 @@
 package kr.org.booklog.domain.like.service;
 
 import kr.org.booklog.domain.like.dto.LikesSaveRequestDto;
+import kr.org.booklog.domain.like.entity.Likes;
 import kr.org.booklog.domain.like.repository.LikesRepository;
 import kr.org.booklog.domain.post.entity.Post;
 import kr.org.booklog.domain.post.repository.PostRepository;
@@ -38,5 +39,11 @@ public class LikesService {
         post.updateLikesCnt(post.getLikesCnt());    // 게시글의 좋아요 수 업데이트
 
         return likesRepository.save(requestDto.toEntity()).getId();
+    }
+
+    public void delete(Long postId, Long likeId) {
+        Likes entity = likesRepository.findById(likeId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 감상평이 없습니다. id = " + postId));
+        likesRepository.delete(entity);
     }
 }
