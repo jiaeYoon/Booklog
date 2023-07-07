@@ -112,4 +112,27 @@ class PostServiceTest {
         assertThat(responseDto1.getLikesCnt()).isEqualTo(1);
         assertThat(responseDto1.getPostTitle()).isEqualTo("테스트를 읽고...");
     }
+
+    @Test
+    void 게시글_수정() throws Exception {
+
+        //given
+        User user1 = new User("tname", "tpw", "tnickname", "temail@gmail.com", OAuthType.GOOGLE);
+        userRepository.save(user1);
+
+        Post post = new Post(user1, "테스트를 읽고...", "테스트", "zzyoon",
+                LocalDate.of(2023, 5, 14), LocalDate.of(2023, 6, 14), LocalDate.of(2023, 6, 14),
+                4, "감상평 테스트", 0, 0);
+        postRepository.save(post);
+
+        //when
+        Long updatedId = postService.update(post.getId(), new PostRequestDto("인간실격을 읽고...", "테스트", "zzyoon",
+                LocalDate.of(2023, 5, 14), LocalDate.of(2023, 6, 14), LocalDate.of(2023, 6, 14),
+                1, "감상평 테스트"));
+
+        //then
+        assertThat(postRepository.findById(updatedId).get().getPostTitle()).isEqualTo("인간실격을 읽고...");
+        assertThat(postRepository.findById(updatedId).get().getBookTitle()).isEqualTo("테스트");
+        assertThat(postRepository.findById(updatedId).get().getRating()).isEqualTo(1);
+    }
 }
