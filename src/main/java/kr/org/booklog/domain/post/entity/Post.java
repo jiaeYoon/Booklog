@@ -6,18 +6,20 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Getter
 @NoArgsConstructor
+@DynamicInsert
 @Entity
 public class Post {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long postId;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -62,8 +64,7 @@ public class Post {
 
     @Builder
     public Post(User user, String postTitle, String bookTitle, String bookWriter,
-                LocalDate readStart, LocalDate readEnd, LocalDate postAt,
-                          Integer rating, String content) {
+                LocalDate readStart, LocalDate readEnd, LocalDate postAt, Integer rating, String content, Integer likesCnt, Integer commentsCnt) {
         this.user = user;
         this.postTitle = postTitle;
         this.bookTitle = bookTitle;
@@ -73,6 +74,12 @@ public class Post {
         this.postAt = postAt;
         this.rating = rating;
         this.content = content;
+        this.likesCnt = likesCnt;
+        this.commentsCnt = commentsCnt;
+    }
+
+    public void updateLikesCnt(Integer likesCnt) {
+        this.likesCnt = likesCnt + 1;
     }
 
 }

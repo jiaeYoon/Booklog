@@ -1,12 +1,14 @@
 package kr.org.booklog.domain.post.controller;
 
 import kr.org.booklog.domain.post.dto.PostRequestDto;
+import kr.org.booklog.domain.post.dto.PostResponseDto;
+import kr.org.booklog.domain.post.dto.PostTotalResponseDto;
 import kr.org.booklog.domain.post.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequestMapping("/api/v1")
 @Controller
@@ -23,5 +25,15 @@ public class PostController {
     @PostMapping("/posts")
     public Long savePost(@RequestBody PostRequestDto requestDto) {
         return postService.save(requestDto);
+    }
+
+    @GetMapping("/posts")
+    public List<PostTotalResponseDto> findAll() {
+        return postService.findAll();
+    }
+
+    @GetMapping("/posts/{id}")
+    public PostResponseDto findById(@PathVariable Long id) {
+        return postService.findById(id);
     }
 }

@@ -1,16 +1,19 @@
 package kr.org.booklog.domain.post.service;
 
 import kr.org.booklog.domain.post.dto.PostRequestDto;
+import kr.org.booklog.domain.post.dto.PostTotalResponseDto;
 import kr.org.booklog.domain.post.entity.Post;
 import kr.org.booklog.domain.post.repository.PostRepository;
-import org.assertj.core.api.Assertions;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.NoSuchElementException;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -40,6 +43,31 @@ class PostServiceTest {
         //then
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException());
-        Assertions.assertThat(post.getBookTitle()).isEqualTo("이방인");
+        assertThat(post.getBookTitle()).isEqualTo("이방인");
+    }
+
+    @Test
+    void 전체_게시글_조회() {
+
+        //given
+        for (int i = 0; i < 3; i++) {
+            postService.save(PostRequestDto.builder()
+                .userId(1L)
+                .postTitle("테스트를 읽고...")
+                .bookTitle("테스트")
+                .bookWriter("zzyoon")
+                .readStart(LocalDate.of(2023, 5, 14))
+                .readEnd(LocalDate.of(2023, 6, 14))
+                .postAt(LocalDate.of(2023, 6, 14))
+                .rating(4)
+                .content("테스트 감상평")
+                .build());
+        }
+
+        //when
+        List<PostTotalResponseDto> responseDto = postService.findAll();
+
+        //then
+        assertThat(responseDto.size()).isEqualTo(3);
     }
 }

@@ -2,6 +2,7 @@ package kr.org.booklog.domain.user.entity;
 
 import com.sun.istack.NotNull;
 import kr.org.booklog.config.BaseTimeEntity;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,7 +17,7 @@ public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private Long id;
 
     @NotNull
     @Column(columnDefinition = "varchar(30)")
@@ -38,4 +39,13 @@ public class User extends BaseTimeEntity {
     @NotNull
     @Column(columnDefinition = "varchar(30)")
     private OAuthType join_type;
+
+    @Builder
+    public User(String name, String password, String nickname, String email, OAuthType join_type) {
+        this.name = name;
+        this.password = password;
+        this.nickname = nickname;
+        this.email = email;
+        this.join_type = join_type;
+    }
 }
