@@ -35,7 +35,7 @@ public class LikesService {
         requestDto.setUser(user);
         requestDto.setPost(post);
         
-        // TODO : Post의 likesCnt 업데이트
+        post.updateLikesCnt(post.getLikesCnt());    // 게시글의 좋아요 수 업데이트
 
         return likesRepository.save(requestDto.toEntity()).getId();
     }
