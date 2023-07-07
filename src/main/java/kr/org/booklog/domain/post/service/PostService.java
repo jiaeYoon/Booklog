@@ -59,4 +59,11 @@ public class PostService {
 
         return responseDto;
     }
+
+    public Long update(Long id, PostRequestDto requestDto) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id = " + id));
+        post.updatePost(requestDto);
+        return id;
+    }
 }

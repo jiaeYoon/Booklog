@@ -40,6 +40,19 @@ public class PostRequestDto {
         this.content = content;
     }
 
+    public PostRequestDto(String postTitle, String bookTitle, String bookWriter,
+                          LocalDate readStart, LocalDate readEnd, LocalDate postAt,
+                          Integer rating, String content) {
+        this.postTitle = postTitle;
+        this.bookTitle = bookTitle;
+        this.bookWriter = bookWriter;
+        this.readStart = readStart;
+        this.readEnd = readEnd;
+        this.postAt = postAt;
+        this.rating = rating;
+        this.content = content;
+    }
+
     public Post toEntity() {
         return Post.builder()
                 .user(user)

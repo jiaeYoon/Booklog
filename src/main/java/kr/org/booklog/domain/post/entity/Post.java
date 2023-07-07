@@ -1,6 +1,7 @@
 package kr.org.booklog.domain.post.entity;
 
 import com.sun.istack.NotNull;
+import kr.org.booklog.domain.post.dto.PostRequestDto;
 import kr.org.booklog.domain.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -80,6 +81,17 @@ public class Post {
 
     public void updateLikesCnt(Integer likesCnt) {
         this.likesCnt = likesCnt + 1;
+    }
+
+    public void updatePost(PostRequestDto requestDto) {
+        this.postTitle = requestDto.getPostTitle();
+        this.bookTitle = requestDto.getBookTitle();
+        this.bookWriter = requestDto.getBookWriter();
+        this.readStart = requestDto.getReadStart();
+        this.readEnd = requestDto.getReadEnd();
+        this.postAt = requestDto.getPostAt();
+        this.rating = requestDto.getRating();
+        this.content = requestDto.getContent();
     }
 
 }
