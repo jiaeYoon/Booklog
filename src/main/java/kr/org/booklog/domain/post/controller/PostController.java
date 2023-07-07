@@ -36,4 +36,9 @@ public class PostController {
     public PostResponseDto findById(@PathVariable Long id, Long userId) {
         return postService.findById(id, userId);
     }
+
+    @PatchMapping("posts/{id}")
+    public Long updatePost(@PathVariable Long id, @RequestBody PostRequestDto requestDto) {
+        return postService.update(id, requestDto);
+    }
 }
