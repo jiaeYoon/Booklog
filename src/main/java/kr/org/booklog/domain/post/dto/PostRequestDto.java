@@ -24,6 +24,8 @@ public class PostRequestDto {
     private LocalDate postAt;
     private Integer rating;
     private String content;
+    private Integer likesCnt;
+    private Integer commentsCnt;
 
     @Builder
     public PostRequestDto(Long userId, String postTitle, String bookTitle, String bookWriter,
@@ -64,6 +66,8 @@ public class PostRequestDto {
                 .postAt(postAt)
                 .rating(rating)
                 .content(content)
+                .likesCnt(0)
+                .commentsCnt(0)
                 .build();
     }
 }
