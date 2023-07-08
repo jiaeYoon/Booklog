@@ -12,10 +12,10 @@ import org.hibernate.annotations.DynamicInsert;
 import javax.persistence.*;
 import java.time.LocalDate;
 
+@Entity
 @Getter
 @NoArgsConstructor
 @DynamicInsert
-@Entity
 public class Post {
 
     @Id
