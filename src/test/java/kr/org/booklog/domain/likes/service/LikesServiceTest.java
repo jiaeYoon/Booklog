@@ -92,5 +92,6 @@ class LikesServiceTest {
 
         //then
         assertThat(likesRepository.findAll().size()).isEqualTo(repoSize - 1);
+        assertThat(postRepository.findById(postId).get().getLikesCnt()).isEqualTo(0);
     }
 }
