@@ -36,14 +36,20 @@ public class LikesService {
         requestDto.setUser(user);
         requestDto.setPost(post);
         
-        post.updateLikesCnt(post.getLikesCnt());    // 게시글의 좋아요 수 업데이트
+        post.updateLikesCnt(post.getLikesCnt(), Boolean.TRUE);    // 게시글의 좋아요 수 업데이트(+1)
 
         return likesRepository.save(requestDto.toEntity()).getId();
     }
 
     public void delete(Long postId, Long likeId) {
         Likes entity = likesRepository.findById(likeId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 감상평에 등록한 좋아요가 없습니다. id = " + likeId));
+
+        Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 감상평이 없습니다. id = " + postId));
+
+        post.updateLikesCnt(post.getLikesCnt(), Boolean.FALSE);    // 게시글의 좋아요 수 업데이트(-1)
+
         likesRepository.delete(entity);
     }
 }
