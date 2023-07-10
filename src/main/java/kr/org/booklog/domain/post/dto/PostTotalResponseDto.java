@@ -1,11 +1,13 @@
 package kr.org.booklog.domain.post.dto;
 
 import kr.org.booklog.domain.post.entity.Post;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
 
+@Getter
 @Setter
 @NoArgsConstructor
 public class PostTotalResponseDto {
