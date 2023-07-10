@@ -5,7 +5,8 @@ import kr.org.booklog.domain.like.service.LikesService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RequestMapping("/api/v1")
+@RestController
 public class LikesController {
 
     private final LikesService likesService;
