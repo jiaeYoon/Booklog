@@ -1,9 +1,9 @@
 package kr.org.booklog.domain.comment;
 
 import kr.org.booklog.domain.comment.dto.CommentRequestDto;
+import kr.org.booklog.domain.comment.dto.CommentResponseDto;
 import kr.org.booklog.domain.comment.repository.CommentRepository;
-import kr.org.booklog.domain.post.CommentService;
-import kr.org.booklog.domain.post.dto.PostRequestDto;
+import kr.org.booklog.domain.comment.service.CommentService;
 import kr.org.booklog.domain.post.repository.PostRepository;
 import kr.org.booklog.domain.post.entity.Post;
 import kr.org.booklog.domain.user.entity.OAuthType;
@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -26,7 +27,6 @@ class CommentServiceTest {
     @Autowired UserRepository userRepository;
     @Autowired PostRepository postRepository;
     @Autowired CommentService commentService;
-    @Autowired PostService postService;
 
     @Test
     void 댓글_등록() {
@@ -46,5 +46,27 @@ class CommentServiceTest {
 
         // then
         assertThat(commentRepository.findById(commentId).get().getContent()).isEqualTo("테스트 댓글");
+    }
+
+    @Test
+    void 댓글_조회() {
+
+        // given
+        User user = new User("tname", "tpw", "tnickname", "temail@gmail.com", OAuthType.GOOGLE);
+        Long userId = userRepository.save(user).getId();
+
+        Post post = new Post(user, "댓글 조회 테스트를 읽고...", "댓글 조회 테스트", "zzyoon",
+                LocalDate.of(2023, 5, 14), LocalDate.of(2023, 6, 14), LocalDate.of(2023, 6, 14),
+                4, "댓글 조회 테스트", 0, 0);
+        Long postId = postRepository.save(post).getId();
+
+        commentService.save(new CommentRequestDto(userId, postId, "댓글 조회 테스트의 댓글1"));
+        commentService.save(new CommentRequestDto(userId, postId, "댓글 조회 테스트의 댓글2"));
+
+        // when
+        List<CommentResponseDto> comments = commentService.findAll(postId);
+
+        // then
+        assertThat(comments.size()).isEqualTo(2);
     }
 }
