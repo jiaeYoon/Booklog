@@ -33,8 +33,7 @@ class CommentServiceTest {
 
         // given
         User user = new User("tname", "tpw", "tnickname", "temail@gmail.com", OAuthType.GOOGLE);
-        userRepository.save(user);
-        Long userId = userRepository.findTop1ByOrderByIdDesc().getId();
+        Long userId = userRepository.save(user).getId();
 
         Post post = new Post(user, "댓글 조회 테스트를 읽고...", "댓글 조회 테스트", "zzyoon",
                 LocalDate.of(2023, 5, 14), LocalDate.of(2023, 6, 14), LocalDate.of(2023, 6, 14),
