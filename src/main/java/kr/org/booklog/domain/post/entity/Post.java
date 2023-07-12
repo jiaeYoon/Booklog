@@ -88,6 +88,15 @@ public class Post {
         }
     }
 
+    public void updateCommentsCnt(Integer commentsCnt, Boolean plus) {
+        if (plus) {
+            this.commentsCnt = commentsCnt + 1;
+        }
+        else {
+            this.commentsCnt = commentsCnt - 1;
+        }
+    }
+
     public void updatePost(PostRequestDto requestDto) {
         this.postTitle = requestDto.getPostTitle();
         this.bookTitle = requestDto.getBookTitle();
