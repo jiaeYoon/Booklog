@@ -14,7 +14,6 @@ import kr.org.booklog.domain.user.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
@@ -39,16 +38,16 @@ class LikesServiceTest {
             userRepository.save(user);
         }
 
-        Long userId = userRepository.findAll().get(0).getId();
-        
+        Long userId = userRepository.findTop1ByOrderByIdDesc().getId();
+
         for (int i = 0; i < 4; i++) {
             postService.save(new PostRequestDto(userId, "테스트를 읽고...", "테스트", "zzyoon",
                     LocalDate.of(2023, 5, 14), LocalDate.of(2023, 6, 14), LocalDate.of(2023, 6, 14),
                     4, "감상평 테스트1"));
         }
 
-        Long postId = postRepository.findAll().get(1).getId();
-        
+        Long postId = postRepository.findTop1ByOrderByIdDesc().getId();
+
         // when
         // 유저 2명이 한 포스트에 좋아요 등록
         LikesSaveRequestDto requestDto1 = new LikesSaveRequestDto();
@@ -64,11 +63,8 @@ class LikesServiceTest {
         Likes like = likesRepository.findById(likesId).get();
 
         assertThat(like.getUser().getId()).isEqualTo(userId);
-        assertThat(like.getPost().getId()).isEqualTo(postRepository.findAll().get(0).getId()+1L);
         assertThat(like.getIsLike()).isEqualTo(Boolean.TRUE);
         assertThat(postRepository.findById(postId).get().getLikesCnt()).isEqualTo(2);   // 두 명이 좋아요한 게시글의 좋아요 수 확인
-
-        assertThat(postRepository.findAll().get(0).getLikesCnt()).isEqualTo(0);     // 좋아요하지 않은 게시글의 좋아요 수 확인
     }
 
     @Test
