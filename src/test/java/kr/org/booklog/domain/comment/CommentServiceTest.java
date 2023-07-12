@@ -69,4 +69,25 @@ class CommentServiceTest {
         // then
         assertThat(comments.size()).isEqualTo(2);
     }
+
+    @Test
+    void 댓글_수정() {
+        // given
+        User user = new User("tname", "tpw", "tnickname", "temail@gmail.com", OAuthType.GOOGLE);
+        Long userId = userRepository.save(user).getId();
+
+        Post post = new Post(user, "댓글 수정 테스트를 읽고...", "댓글 수정 테스트", "zzyoon",
+                LocalDate.of(2023, 5, 14), LocalDate.of(2023, 6, 14), LocalDate.of(2023, 6, 14),
+                4, "댓글 수정 테스트", 0, 0);
+        Long postId = postRepository.save(post).getId();
+
+        Long commentId = commentService.save(new CommentRequestDto(userId, postId, "댓글 수정 테스트의 댓글"));
+
+        // when
+        commentService.update(commentId, new CommentRequestDto("댓글이 수정되었습니다!"));
+
+        // then
+        assertThat(commentRepository.findById(commentId).get().getContent()).isEqualTo("댓글이 수정되었습니다!");
+        assertThat(commentRepository.findById(commentId).get().getContent()).isNotEqualTo("댓글 수정 테스트의 댓글");
+    }
 }
