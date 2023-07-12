@@ -2,6 +2,7 @@ package kr.org.booklog.domain.comment.entity;
 
 import com.sun.istack.NotNull;
 import kr.org.booklog.config.BaseTimeEntity;
+import kr.org.booklog.domain.comment.dto.CommentRequestDto;
 import kr.org.booklog.domain.post.entity.Post;
 import kr.org.booklog.domain.user.entity.User;
 import lombok.Builder;
@@ -36,5 +37,9 @@ public class Comment extends BaseTimeEntity {
         this.user = user;
         this.post = post;
         this.content = content;
+    }
+
+    public void update(CommentRequestDto requestDto) {
+        this.content = requestDto.getContent();
     }
 }

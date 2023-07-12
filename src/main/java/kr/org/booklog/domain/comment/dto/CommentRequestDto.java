@@ -26,6 +26,10 @@ public class CommentRequestDto {
         this.content = content;
     }
 
+    public CommentRequestDto(String content) {
+        this.content = content;
+    }
+
     public Comment toEntity() {
         return Comment.builder()
                 .user(user)

@@ -26,4 +26,9 @@ public class CommentController {
     public List<CommentResponseDto> findAll(@PathVariable Long id) {
         return commentService.findAll(id);
     }
+
+    @PatchMapping("/comments/{id}")
+    public Long update(@PathVariable Long id, @RequestBody CommentRequestDto requestDto) {
+        return commentService.update(id, requestDto);
+    }
 }

@@ -54,4 +54,11 @@ public class CommentService {
         }
         return responseDtos;
     }
+
+    public Long update(Long id, CommentRequestDto requestDto) {
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("해당 댓글이 없습니다. id = " + id));
+        comment.update(requestDto);
+        return id;
+    }
 }
