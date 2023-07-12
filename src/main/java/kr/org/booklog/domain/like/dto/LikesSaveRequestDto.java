@@ -16,13 +16,11 @@ public class LikesSaveRequestDto {
     private User user;
     private Long userId;
     private Post post;
-    private Long postId;
     private Boolean isLike;
 
     @Builder
-    public LikesSaveRequestDto(Long userId, Long postId) {
+    public LikesSaveRequestDto(Long userId) {
         this.userId = userId;
-        this.postId = postId;
         this.isLike = Boolean.TRUE;
     }
 

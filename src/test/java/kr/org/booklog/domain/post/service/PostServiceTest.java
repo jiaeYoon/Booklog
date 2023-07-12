@@ -102,7 +102,7 @@ class PostServiceTest {
         postRepository.save(post);
 
         //when
-        likesService.save(post.getId(), new LikesSaveRequestDto(user1.getId(), post.getId()));
+        likesService.save(post.getId(), new LikesSaveRequestDto(user1.getId()));
         PostResponseDto responseDto1 = postService.findById(post.getId(), user1.getId());
         PostResponseDto responseDto2 = postService.findById(post.getId(), user2.getId());
 

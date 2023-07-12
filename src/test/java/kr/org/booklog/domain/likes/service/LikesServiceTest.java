@@ -53,11 +53,9 @@ class LikesServiceTest {
         // 유저 2명이 한 포스트에 좋아요 등록
         LikesSaveRequestDto requestDto1 = new LikesSaveRequestDto();
         requestDto1.setUserId(userId);
-        requestDto1.setPostId(postId);
 
         LikesSaveRequestDto requestDto2 = new LikesSaveRequestDto();
         requestDto2.setUserId(userRepository.findAll().get(1).getId());
-        requestDto2.setPostId(postId);
 
         Long likesId = likesService.save(postId, requestDto1);
         Long likesId2 = likesService.save(postId, requestDto2);
@@ -84,7 +82,7 @@ class LikesServiceTest {
                 LocalDate.of(2023, 5, 14), LocalDate.of(2023, 6, 14), LocalDate.of(2023, 6, 14),
                 4, "감상평 테스트1"));
 
-        Long likesId = likesService.save(postId, new LikesSaveRequestDto(userId, postId));
+        Long likesId = likesService.save(postId, new LikesSaveRequestDto(userId));
         int repoSize = likesRepository.findAll().size();
 
         //when
