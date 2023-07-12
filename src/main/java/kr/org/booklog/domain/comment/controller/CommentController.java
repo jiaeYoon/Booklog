@@ -1,11 +1,11 @@
-package kr.org.booklog.domain.comment;
+package kr.org.booklog.domain.comment.controller;
 
 import kr.org.booklog.domain.comment.dto.CommentRequestDto;
-import kr.org.booklog.domain.post.CommentService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import kr.org.booklog.domain.comment.dto.CommentResponseDto;
+import kr.org.booklog.domain.comment.service.CommentService;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -22,4 +22,8 @@ public class CommentController {
         return commentService.save(requestDto);
     }
 
+    @GetMapping("/posts/{id}/comments")
+    public List<CommentResponseDto> findAll(@PathVariable Long id) {
+        return commentService.findAll(id);
+    }
 }

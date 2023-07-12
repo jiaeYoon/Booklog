@@ -1,6 +1,8 @@
-package kr.org.booklog.domain.post;
+package kr.org.booklog.domain.comment.service;
 
 import kr.org.booklog.domain.comment.dto.CommentRequestDto;
+import kr.org.booklog.domain.comment.dto.CommentResponseDto;
+import kr.org.booklog.domain.comment.entity.Comment;
 import kr.org.booklog.domain.comment.repository.CommentRepository;
 import kr.org.booklog.domain.post.entity.Post;
 import kr.org.booklog.domain.post.repository.PostRepository;
@@ -9,6 +11,8 @@ import kr.org.booklog.domain.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -25,7 +29,6 @@ public class CommentService {
         this.postRepository = postRepository;
     }
 
-
     public Long save(CommentRequestDto requestDto) {
 
         Long userId = requestDto.getUserId();
@@ -41,5 +44,14 @@ public class CommentService {
         post.updateCommentsCnt(post.getCommentsCnt(), Boolean.TRUE);    // 게시글의 댓글 수 업데이트(+1)
 
         return commentRepository.save(requestDto.toEntity()).getId();
+    }
+
+    public List<CommentResponseDto> findAll(Long id) {
+        List<Comment> comments = commentRepository.findByPostId(id);
+        List<CommentResponseDto> responseDtos = new ArrayList<>();
+        for (Comment comment:comments) {
+            responseDtos.add(new CommentResponseDto(comment));
+        }
+        return responseDtos;
     }
 }
