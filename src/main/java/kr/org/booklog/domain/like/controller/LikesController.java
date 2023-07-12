@@ -15,13 +15,13 @@ public class LikesController {
         this.likesService = likesService;
     }
 
-    @PostMapping("/posts/{post_id}/likes")
-    public Long save(@PathVariable Long postId, @RequestBody LikesSaveRequestDto requestDto) {
-        return likesService.save(postId, requestDto);
+    @PostMapping("/posts/{id}/likes")
+    public Long save(@PathVariable Long id, @RequestBody LikesSaveRequestDto requestDto) {
+        return likesService.save(id, requestDto);
     }
 
     @DeleteMapping("/posts/{id}/likes")
-    public void delete(@PathVariable Long postId, @RequestParam Long likeId) {
-        likesService.delete(postId, likeId);
+    public void delete(@PathVariable Long id, @RequestParam Long likeId) {
+        likesService.delete(id, likeId);
     }
 }
