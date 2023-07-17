@@ -6,7 +6,7 @@ import kr.org.booklog.domain.comment.repository.CommentRepository;
 import kr.org.booklog.domain.comment.service.CommentService;
 import kr.org.booklog.domain.post.repository.PostRepository;
 import kr.org.booklog.domain.post.entity.Post;
-import kr.org.booklog.domain.user.entity.OAuthType;
+import kr.org.booklog.domain.user.entity.Role;
 import kr.org.booklog.domain.user.entity.User;
 import kr.org.booklog.domain.user.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -32,7 +32,7 @@ class CommentServiceTest {
     void 댓글_등록() {
 
         // given
-        User user = new User("tname", "tpw", "tnickname", "temail@gmail.com", OAuthType.GOOGLE);
+        User user = new User("tname", "tnickname", "temail@gmail.com", Role.USER);
         Long userId = userRepository.save(user).getId();
 
         Post post = new Post(user, "댓글 조회 테스트를 읽고...", "댓글 조회 테스트", "zzyoon",
@@ -52,7 +52,7 @@ class CommentServiceTest {
     void 댓글_조회() {
 
         // given
-        User user = new User("tname", "tpw", "tnickname", "temail@gmail.com", OAuthType.GOOGLE);
+        User user = new User("tname", "tnickname", "temail@gmail.com", Role.USER);
         Long userId = userRepository.save(user).getId();
 
         Post post = new Post(user, "댓글 조회 테스트를 읽고...", "댓글 조회 테스트", "zzyoon",
@@ -73,7 +73,7 @@ class CommentServiceTest {
     @Test
     void 댓글_수정() {
         // given
-        User user = new User("tname", "tpw", "tnickname", "temail@gmail.com", OAuthType.GOOGLE);
+        User user = new User("tname", "tnickname", "temail@gmail.com", Role.USER);
         Long userId = userRepository.save(user).getId();
 
         Post post = new Post(user, "댓글 수정 테스트를 읽고...", "댓글 수정 테스트", "zzyoon",
@@ -94,7 +94,7 @@ class CommentServiceTest {
     @Test
     void 댓글_삭제() {
         // given
-        User user = new User("tname", "tpw", "tnickname", "temail@gmail.com", OAuthType.GOOGLE);
+        User user = new User("tname", "tnickname", "temail@gmail.com", Role.USER);
         Long userId = userRepository.save(user).getId();
 
         Post post = new Post(user, "댓글 삭제 테스트를 읽고...", "댓글 삭제 테스트", "zzyoon",

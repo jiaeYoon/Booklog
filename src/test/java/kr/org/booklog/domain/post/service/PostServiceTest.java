@@ -1,7 +1,6 @@
 package kr.org.booklog.domain.post.service;
 
 import kr.org.booklog.domain.like.dto.LikesSaveRequestDto;
-import kr.org.booklog.domain.like.repository.LikesRepository;
 import kr.org.booklog.domain.like.service.LikesService;
 import kr.org.booklog.domain.post.dto.PostRequestDto;
 import kr.org.booklog.domain.post.dto.PostResponseDto;
@@ -9,7 +8,7 @@ import kr.org.booklog.domain.post.dto.PostTotalResponseDto;
 import kr.org.booklog.domain.post.entity.Post;
 import kr.org.booklog.domain.post.repository.PostRepository;
 
-import kr.org.booklog.domain.user.entity.OAuthType;
+import kr.org.booklog.domain.user.entity.Role;
 import kr.org.booklog.domain.user.entity.User;
 import kr.org.booklog.domain.user.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -28,7 +27,6 @@ class PostServiceTest {
 
     @Autowired PostRepository postRepository;
     @Autowired UserRepository userRepository;
-    @Autowired LikesRepository likesRepository;
     @Autowired PostService postService;
     @Autowired LikesService likesService;
 
@@ -36,7 +34,7 @@ class PostServiceTest {
     void 게시글_저장() {
 
         //given
-        User user = new User("tname", "tpw", "tnickname", "temail@gmail.com", OAuthType.GOOGLE);
+        User user = new User("tname", "tnickname", "temail@gmail.com", Role.USER);
         userRepository.save(user);
 
         PostRequestDto requestDto = new PostRequestDto();
@@ -54,8 +52,7 @@ class PostServiceTest {
         Long id = postService.save(requestDto);
 
         //then
-        Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException());
+        Post post = postRepository.findById(id).get();
         assertThat(post.getBookTitle()).isEqualTo("이방인");
     }
 
@@ -63,7 +60,9 @@ class PostServiceTest {
     void 전체_게시글_조회() {
 
         //given
-        User user = new User("tname", "tpw", "tnickname", "temail@gmail.com", OAuthType.GOOGLE);
+        int repoSize = postRepository.findAll().size();
+
+        User user = new User("tname", "tnickname", "temail@gmail.com", Role.USER);
         userRepository.save(user);
 
         for (int i = 0; i < 3; i++) {
@@ -84,16 +83,16 @@ class PostServiceTest {
         List<PostTotalResponseDto> responseDto = postService.findAll();
 
         //then
-        assertThat(responseDto.size()).isEqualTo(3);
+        assertThat(responseDto.size()).isEqualTo(repoSize + 3);
     }
 
     @Test
     void 특정_게시글_조회() {
         //given
-        User user1 = new User("tname", "tpw", "tnickname", "temail@gmail.com", OAuthType.GOOGLE);
+        User user1 = new User("tname1", "tnickname1", "temail1@gmail.com", Role.USER);
         userRepository.save(user1);
 
-        User user2 = new User("tname2", "tpw2", "tnickname2", "temail2@gmail.com", OAuthType.GOOGLE);
+        User user2 = new User("tname2", "tnickname2", "temail2@gmail.com", Role.USER);
         userRepository.save(user2);
 
         Post post = new Post(user1, "테스트를 읽고...", "테스트", "zzyoon",
@@ -120,10 +119,10 @@ class PostServiceTest {
     void 게시글_수정() throws Exception {
 
         //given
-        User user1 = new User("tname", "tpw", "tnickname", "temail@gmail.com", OAuthType.GOOGLE);
-        userRepository.save(user1);
+        User user = new User("tname", "tnickname", "temail@gmail.com", Role.USER);
+        userRepository.save(user);
 
-        Post post = new Post(user1, "테스트를 읽고...", "테스트", "zzyoon",
+        Post post = new Post(user, "테스트를 읽고...", "테스트", "zzyoon",
                 LocalDate.of(2023, 5, 14), LocalDate.of(2023, 6, 14), LocalDate.of(2023, 6, 14),
                 4, "감상평 테스트", 0, 0);
         postRepository.save(post);
@@ -143,7 +142,7 @@ class PostServiceTest {
     void 게시글_삭제() {
 
         //given
-        User user1 = new User("tname", "tpw", "tnickname", "temail@gmail.com", OAuthType.GOOGLE);
+        User user1 = new User("tname", "tnickname", "temail@gmail.com", Role.USER);
         userRepository.save(user1);
 
         Long post1Id = postService.save(new PostRequestDto(user1.getId(), "테스트를 읽고...", "테스트", "zzyoon",
@@ -154,10 +153,12 @@ class PostServiceTest {
                 LocalDate.of(2023, 5, 14), LocalDate.of(2023, 6, 14), LocalDate.of(2023, 6, 14),
                 4, "감상평 테스트2"));
 
+        int repoSize = postRepository.findAll().size();
+
         // when
         postService.delete(post1Id);
 
         //then
-        assertThat(postRepository.findAll().size()).isEqualTo(1);
+        assertThat(postRepository.findAll().size()).isEqualTo(repoSize - 1);
     }
 }

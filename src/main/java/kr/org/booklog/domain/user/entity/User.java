@@ -24,10 +24,6 @@ public class User extends BaseTimeEntity {
     private String name;
 
     @NotNull
-    @Column(columnDefinition = "varchar(255)")
-    private String password;
-
-    @NotNull
     @Column(columnDefinition = "varchar(30)")
     private String nickname;
 
@@ -37,15 +33,22 @@ public class User extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     @NotNull
-    @Column(columnDefinition = "varchar(30)")
-    private OAuthType join_type;
+    private Role role;
 
     @Builder
-    public User(String name, String password, String nickname, String email, OAuthType join_type) {
+    public User(String name, String nickname, String email, Role role) {
         this.name = name;
-        this.password = password;
         this.nickname = nickname;
         this.email = email;
-        this.join_type = join_type;
+        this.role = role;
+    }
+
+    public User update(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public String getRoleKey() {
+        return this.role.getKey();
     }
 }
