@@ -22,4 +22,9 @@ public class IndexController {
         }
         return "index";
     }
+
+    @GetMapping("/api/v1/posts/save")
+    public String postsSave() {
+        return "post-save";
+    }
 }
