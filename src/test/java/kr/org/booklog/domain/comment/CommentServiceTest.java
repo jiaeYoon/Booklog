@@ -84,7 +84,8 @@ class CommentServiceTest {
         Long commentId = commentService.save(new CommentRequestDto(userId, postId, "댓글 수정 테스트의 댓글"));
 
         // when
-        commentService.update(commentId, new CommentRequestDto("댓글이 수정되었습니다!"));
+        CommentRequestDto dto = CommentRequestDto.builder().content("댓글이 수정되었습니다!").build();
+        commentService.update(commentId, dto);
 
         // then
         assertThat(commentRepository.findById(commentId).get().getContent()).isEqualTo("댓글이 수정되었습니다!");

@@ -128,9 +128,17 @@ class PostServiceTest {
         postRepository.save(post);
 
         //when
-        Long updatedId = postService.update(post.getId(), new PostRequestDto("인간실격을 읽고...", "테스트", "zzyoon",
-                LocalDate.of(2023, 5, 14), LocalDate.of(2023, 6, 14), LocalDate.of(2023, 6, 14),
-                1, "감상평 테스트"));
+        PostRequestDto dto = PostRequestDto.builder()
+                .postTitle("인간실격을 읽고...")
+                .bookTitle("테스트")
+                .bookWriter("zzyoon")
+                .readStart(LocalDate.of(2023, 5, 14))
+                .readEnd(LocalDate.of(2023, 6, 14))
+                .postAt(LocalDate.of(2023, 6, 14))
+                .rating(1)
+                .content("감상평 테스트")
+                .build();
+        Long updatedId = postService.update(post.getId(), dto);
 
         //then
         assertThat(postRepository.findById(updatedId).get().getPostTitle()).isEqualTo("인간실격을 읽고...");

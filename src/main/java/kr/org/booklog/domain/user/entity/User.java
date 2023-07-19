@@ -5,12 +5,10 @@ import kr.org.booklog.config.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @Entity
 public class User extends BaseTimeEntity {
