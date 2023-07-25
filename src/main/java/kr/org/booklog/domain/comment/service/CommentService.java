@@ -42,6 +42,7 @@ public class CommentService {
         return commentRepository.save(requestDto.toEntity()).getId();
     }
 
+    @Transactional(readOnly = true)
     public List<CommentResponseDto> findAll(Long id) {
         List<Comment> comments = commentRepository.findByPostId(id);
         List<CommentResponseDto> responseDtos = new ArrayList<>();

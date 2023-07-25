@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
-@Transactional
+@Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
 public class PostService {
@@ -25,13 +25,7 @@ public class PostService {
     private final UserRepository userRepository;
     private final LikesRepository likesRepository;
 
-    @Autowired
-    public PostService(PostRepository postRepository, UserRepository userRepository, LikesRepository likesRepository) {
-        this.postRepository = postRepository;
-        this.userRepository = userRepository;
-        this.likesRepository = likesRepository;
-    }
-
+    @Transactional
     public Long save(PostRequestDto requestDto) {
         User user = userRepository.findById(requestDto.getUserId())
                 .orElseThrow(() -> new NoSuchElementException());
@@ -62,6 +56,7 @@ public class PostService {
         return responseDto;
     }
 
+    @Transactional
     public Long update(Long id, PostRequestDto requestDto) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id = " + id));
@@ -69,6 +64,7 @@ public class PostService {
         return id;
     }
 
+    @Transactional
     public void delete(Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id = "+ id));
