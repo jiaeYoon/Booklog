@@ -7,22 +7,18 @@ import kr.org.booklog.domain.post.entity.Post;
 import kr.org.booklog.domain.post.repository.PostRepository;
 import kr.org.booklog.domain.user.entity.User;
 import kr.org.booklog.domain.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Service
+@RequiredArgsConstructor
 public class LikesService {
 
     private final LikesRepository likesRepository;
     private final UserRepository userRepository;
     private final PostRepository postRepository;
-
-    public LikesService(LikesRepository likesRepository, UserRepository userRepository, PostRepository postRepository) {
-        this.likesRepository = likesRepository;
-        this.userRepository = userRepository;
-        this.postRepository = postRepository;
-    }
 
     public Long save(Long postId, LikesSaveRequestDto requestDto) {
 
