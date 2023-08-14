@@ -40,11 +40,11 @@ class CommentServiceTest {
         Long postId = postRepository.save(post).getId();
 
         // when
-        CommentRequestDto requestDto = new CommentRequestDto(userId, postId, "테스트 댓글");
+        CommentRequestDto requestDto = new CommentRequestDto(userId, postId, "댓글1");
         Long commentId = commentService.save(requestDto);
 
         // then
-        assertThat(commentRepository.findById(commentId).get().getContent()).isEqualTo("테스트 댓글");
+        assertThat(commentRepository.findById(commentId).get().getContent()).isEqualTo("댓글1");
     }
 
     @Test
@@ -57,8 +57,8 @@ class CommentServiceTest {
         Post post = newPost(user);
         Long postId = postRepository.save(post).getId();
 
-        commentService.save(new CommentRequestDto(userId, postId, "댓글 조회 테스트의 댓글1"));
-        commentService.save(new CommentRequestDto(userId, postId, "댓글 조회 테스트의 댓글2"));
+        commentService.save(new CommentRequestDto(userId, postId, "댓글1"));
+        commentService.save(new CommentRequestDto(userId, postId, "댓글2"));
 
         // when
         List<CommentResponseDto> comments = commentService.findAll(postId);
@@ -79,12 +79,12 @@ class CommentServiceTest {
         Long commentId = commentService.save(new CommentRequestDto(userId, postId, "댓글 수정 테스트의 댓글"));
 
         // when
-        CommentRequestDto dto = CommentRequestDto.builder().content("댓글이 수정되었습니다!").build();
+        CommentRequestDto dto = CommentRequestDto.builder().content("댓글2").build();
         commentService.update(commentId, dto);
 
         // then
-        assertThat(commentRepository.findById(commentId).get().getContent()).isEqualTo("댓글이 수정되었습니다!");
-        assertThat(commentRepository.findById(commentId).get().getContent()).isNotEqualTo("댓글 수정 테스트의 댓글");
+        assertThat(commentRepository.findById(commentId).get().getContent()).isEqualTo("댓글2");
+        assertThat(commentRepository.findById(commentId).get().getContent()).isNotEqualTo("댓글1");
     }
 
     @Test
@@ -99,7 +99,7 @@ class CommentServiceTest {
         int before_delete_size = commentRepository.findAll().size();
         Integer before_delete_comments_cnt = postRepository.findById(postId).get().getCommentsCnt();
 
-        Long commentId = commentService.save(new CommentRequestDto(userId, postId, "댓글 삭제 테스트의 댓글"));
+        Long commentId = commentService.save(new CommentRequestDto(userId, postId, "댓글1"));
 
         // when
         commentService.delete(commentId);
