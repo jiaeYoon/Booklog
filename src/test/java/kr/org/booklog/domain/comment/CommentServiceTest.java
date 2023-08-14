@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -32,12 +33,10 @@ class CommentServiceTest {
     void 댓글_등록() {
 
         // given
-        User user = new User("tname", "tnickname", "temail@gmail.com", Role.USER);
+        User user = newUser();
         Long userId = userRepository.save(user).getId();
 
-        Post post = new Post(user, "댓글 조회 테스트를 읽고...", "댓글 조회 테스트", "zzyoon",
-                LocalDate.of(2023, 5, 14), LocalDate.of(2023, 6, 14), LocalDate.of(2023, 6, 14),
-                4, "댓글 조회 테스트", 0, 0);
+        Post post = newPost(user);
         Long postId = postRepository.save(post).getId();
 
         // when
@@ -52,12 +51,10 @@ class CommentServiceTest {
     void 댓글_조회() {
 
         // given
-        User user = new User("tname", "tnickname", "temail@gmail.com", Role.USER);
+        User user = newUser();
         Long userId = userRepository.save(user).getId();
 
-        Post post = new Post(user, "댓글 조회 테스트를 읽고...", "댓글 조회 테스트", "zzyoon",
-                LocalDate.of(2023, 5, 14), LocalDate.of(2023, 6, 14), LocalDate.of(2023, 6, 14),
-                4, "댓글 조회 테스트", 0, 0);
+        Post post = newPost(user);
         Long postId = postRepository.save(post).getId();
 
         commentService.save(new CommentRequestDto(userId, postId, "댓글 조회 테스트의 댓글1"));
@@ -73,12 +70,10 @@ class CommentServiceTest {
     @Test
     void 댓글_수정() {
         // given
-        User user = new User("tname", "tnickname", "temail@gmail.com", Role.USER);
+        User user = newUser();
         Long userId = userRepository.save(user).getId();
 
-        Post post = new Post(user, "댓글 수정 테스트를 읽고...", "댓글 수정 테스트", "zzyoon",
-                LocalDate.of(2023, 5, 14), LocalDate.of(2023, 6, 14), LocalDate.of(2023, 6, 14),
-                4, "댓글 수정 테스트", 0, 0);
+        Post post = newPost(user);
         Long postId = postRepository.save(post).getId();
 
         Long commentId = commentService.save(new CommentRequestDto(userId, postId, "댓글 수정 테스트의 댓글"));
@@ -95,12 +90,10 @@ class CommentServiceTest {
     @Test
     void 댓글_삭제() {
         // given
-        User user = new User("tname", "tnickname", "temail@gmail.com", Role.USER);
+        User user = newUser();
         Long userId = userRepository.save(user).getId();
 
-        Post post = new Post(user, "댓글 삭제 테스트를 읽고...", "댓글 삭제 테스트", "zzyoon",
-                LocalDate.of(2023, 5, 14), LocalDate.of(2023, 6, 14), LocalDate.of(2023, 6, 14),
-                4, "댓글 삭제 테스트", 0, 0);
+        Post post = newPost(user);
         Long postId = postRepository.save(post).getId();
 
         int before_delete_size = commentRepository.findAll().size();
@@ -114,5 +107,28 @@ class CommentServiceTest {
         // then
         assertThat(commentRepository.findAll().size()).isEqualTo(before_delete_size);
         assertThat(postRepository.findById(postId).get().getCommentsCnt()).isEqualTo(before_delete_comments_cnt);
+    }
+    
+    private User newUser() {
+        return User.builder()
+                .name("유저A")
+                .nickname("닉네임")
+                .email("email@gmail.com")
+                .role(Role.USER)
+                .build();
+    }
+
+    private Post newPost(User user) {
+        return Post.builder()
+                .user(user)
+                .postTitle("게시글 제목")
+                .bookTitle("책 제목")
+                .bookWriter("zzyoon")
+                .readStart(LocalDate.of(2023, 5, 14))
+                .readEnd(LocalDate.of(2023, 6, 14))
+                .postAt(LocalDate.of(2023, 6, 14))
+                .rating(4)
+                .content("후기")
+                .build();
     }
 }
