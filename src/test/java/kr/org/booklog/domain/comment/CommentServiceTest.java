@@ -113,6 +113,9 @@ class CommentServiceTest {
         // when
         commentService.delete(commentId);
 
+        em.flush();
+        em.clear();
+
         // then
         assertThat(commentRepository.findAll().size()).isEqualTo(before_delete_size);
         assertThat(postRepository.findById(postId).get().getCommentsCnt()).isEqualTo(before_delete_comments_cnt);
