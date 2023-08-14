@@ -24,6 +24,7 @@ import static org.assertj.core.api.Assertions.*;
 @Transactional
 class CommentServiceTest {
 
+    @Autowired EntityManager em;
     @Autowired CommentRepository commentRepository;
     @Autowired UserRepository userRepository;
     @Autowired PostRepository postRepository;
@@ -38,6 +39,8 @@ class CommentServiceTest {
 
         Post post = newPost(user);
         Long postId = postRepository.save(post).getId();
+
+        em.clear();
 
         // when
         CommentRequestDto requestDto = new CommentRequestDto(userId, postId, "댓글1");
@@ -56,6 +59,8 @@ class CommentServiceTest {
 
         Post post = newPost(user);
         Long postId = postRepository.save(post).getId();
+
+        em.clear();
 
         commentService.save(new CommentRequestDto(userId, postId, "댓글1"));
         commentService.save(new CommentRequestDto(userId, postId, "댓글2"));
@@ -76,7 +81,9 @@ class CommentServiceTest {
         Post post = newPost(user);
         Long postId = postRepository.save(post).getId();
 
-        Long commentId = commentService.save(new CommentRequestDto(userId, postId, "댓글 수정 테스트의 댓글"));
+        em.clear();
+
+        Long commentId = commentService.save(new CommentRequestDto(userId, postId, "댓글1"));
 
         // when
         CommentRequestDto dto = CommentRequestDto.builder().content("댓글2").build();
@@ -95,6 +102,8 @@ class CommentServiceTest {
 
         Post post = newPost(user);
         Long postId = postRepository.save(post).getId();
+
+        em.clear();
 
         int before_delete_size = commentRepository.findAll().size();
         Integer before_delete_comments_cnt = postRepository.findById(postId).get().getCommentsCnt();
