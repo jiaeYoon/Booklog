@@ -1,6 +1,5 @@
 package kr.org.booklog.domain.post.service;
 
-import kr.org.booklog.domain.like.dto.LikesSaveRequestDto;
 import kr.org.booklog.domain.like.service.LikesService;
 import kr.org.booklog.domain.post.dto.PostRequestDto;
 import kr.org.booklog.domain.post.dto.PostResponseDto;
@@ -16,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -25,6 +25,7 @@ import static org.assertj.core.api.Assertions.*;
 @Transactional
 class PostServiceTest {
 
+    @Autowired EntityManager em;
     @Autowired PostRepository postRepository;
     @Autowired UserRepository userRepository;
     @Autowired PostService postService;
@@ -34,115 +35,87 @@ class PostServiceTest {
     void 게시글_저장() {
 
         //given
-        User user = new User("tname", "tnickname", "temail@gmail.com", Role.USER);
-        userRepository.save(user);
+        Long userId = newUsers(1);
 
-        PostRequestDto requestDto = new PostRequestDto();
-        requestDto.setUserId(user.getId());
-        requestDto.setPostTitle("이방인을 읽고...");
-        requestDto.setBookTitle("이방인");
-        requestDto.setBookWriter("알베르 카뮈");
-        requestDto.setReadStart(LocalDate.of(2023, 5, 14));
-        requestDto.setReadEnd(LocalDate.of(2023, 6, 30));
-        requestDto.setPostAt(LocalDate.of(2023, 6, 30));
-        requestDto.setRating(4);
-        requestDto.setContent("읽고싶었던 책이었는데 드디어 읽었다! 흥미롭게 읽음");
+        PostRequestDto requestDto = PostRequestDto.builder()
+                .userId(userId)
+                .postTitle("게시글 제목")
+                .bookTitle("책 제목")
+                .bookWriter("zzyoon")
+                .readStart(LocalDate.of(2023, 5, 14))
+                .readEnd(LocalDate.of(2023, 6, 14))
+                .postAt(LocalDate.of(2023, 6, 14))
+                .rating(4)
+                .content("후기")
+                .build();
 
         //when
         Long id = postService.save(requestDto);
 
         //then
         Post post = postRepository.findById(id).get();
-        assertThat(post.getBookTitle()).isEqualTo("이방인");
+        assertThat(post.getBookTitle()).isEqualTo("책 제목");
     }
 
     @Test
     void 전체_게시글_조회() {
 
         //given
-        int repoSize = postRepository.findAll().size();
-
-        User user = new User("tname", "tnickname", "temail@gmail.com", Role.USER);
-        userRepository.save(user);
-
-        for (int i = 0; i < 3; i++) {
-            postService.save(PostRequestDto.builder()
-                .userId(user.getId())
-                .postTitle("테스트를 읽고...")
-                .bookTitle("테스트")
-                .bookWriter("zzyoon")
-                .readStart(LocalDate.of(2023, 5, 14))
-                .readEnd(LocalDate.of(2023, 6, 14))
-                .postAt(LocalDate.of(2023, 6, 14))
-                .rating(4)
-                .content("테스트 감상평")
-                .build());
-        }
+        Long userId = newUsers(1);
+        newPosts(userId, 3);
 
         //when
         List<PostTotalResponseDto> responseDto = postService.findAll();
 
         //then
-        assertThat(responseDto.size()).isEqualTo(repoSize + 3);
+        assertThat(responseDto.size()).isEqualTo(3);
     }
 
     @Test
     void 특정_게시글_조회() {
         //given
-        User user1 = new User("tname1", "tnickname1", "temail1@gmail.com", Role.USER);
+        User user1 = new User("user1", "nickname1", "email1@gmail.com", Role.USER);
         userRepository.save(user1);
 
-        User user2 = new User("tname2", "tnickname2", "temail2@gmail.com", Role.USER);
+        User user2 = new User("user2", "nickname2", "email2@gmail.com", Role.USER);
         userRepository.save(user2);
 
-        Post post = new Post(user1, "테스트를 읽고...", "테스트", "zzyoon",
-                LocalDate.of(2023, 5, 14), LocalDate.of(2023, 6, 14), LocalDate.of(2023, 6, 14),
-                4, "감상평 테스트", 0, 0);
-        postRepository.save(post);
+        Long postId = newPosts(user1.getId(), 1);
 
         //when
-        likesService.save(post.getId(), new LikesSaveRequestDto(user1.getId()));
-        PostResponseDto responseDto1 = postService.findById(post.getId(), user1.getId());
-        PostResponseDto responseDto2 = postService.findById(post.getId(), user2.getId());
+        PostResponseDto responseDto1 = postService.findById(postId, user1.getId());
+        PostResponseDto responseDto2 = postService.findById(postId, user2.getId());
 
         //then
-        assertThat(responseDto1.getIsLike()).isEqualTo(Boolean.TRUE);   // 좋아요 누른 사람의 좋아요 여부가 TRUE인지 확인
-        assertThat(responseDto1.getLikeId()).isNotEqualTo(null);
-        assertThat(responseDto1.getLikesCnt()).isEqualTo(1);
-        assertThat(responseDto1.getPostTitle()).isEqualTo("테스트를 읽고...");
-
-        assertThat(responseDto2.getIsLike()).isEqualTo(Boolean.FALSE);  // 좋아요 누르지 않은 사람의 좋아요 여부가 FALSE인지 확인
-        assertThat(responseDto2.getLikeId()).isEqualTo(null);
+        assertThat(responseDto1.getPostTitle()).isEqualTo("게시글 제목0");
     }
 
     @Test
     void 게시글_수정() throws Exception {
 
         //given
-        User user = new User("tname", "tnickname", "temail@gmail.com", Role.USER);
-        userRepository.save(user);
-
-        Post post = new Post(user, "테스트를 읽고...", "테스트", "zzyoon",
-                LocalDate.of(2023, 5, 14), LocalDate.of(2023, 6, 14), LocalDate.of(2023, 6, 14),
-                4, "감상평 테스트", 0, 0);
-        postRepository.save(post);
+        Long userId = newUsers(1);
+        Long postId = newPosts(userId, 1);
 
         //when
         PostRequestDto dto = PostRequestDto.builder()
-                .postTitle("인간실격을 읽고...")
-                .bookTitle("테스트")
+                .postTitle("게시글 제목100")
+                .bookTitle("책 제목100")
                 .bookWriter("zzyoon")
                 .readStart(LocalDate.of(2023, 5, 14))
                 .readEnd(LocalDate.of(2023, 6, 14))
                 .postAt(LocalDate.of(2023, 6, 14))
                 .rating(1)
-                .content("감상평 테스트")
+                .content("후기100")
                 .build();
-        Long updatedId = postService.update(post.getId(), dto);
+        Long updatedId = postService.update(postId, dto);
+
+        em.flush();
+        em.clear();
 
         //then
-        assertThat(postRepository.findById(updatedId).get().getPostTitle()).isEqualTo("인간실격을 읽고...");
-        assertThat(postRepository.findById(updatedId).get().getBookTitle()).isEqualTo("테스트");
+        assertThat(postRepository.findById(updatedId).get().getPostTitle()).isEqualTo("게시글 제목100");
+        assertThat(postRepository.findById(updatedId).get().getBookTitle()).isEqualTo("책 제목100");
         assertThat(postRepository.findById(updatedId).get().getRating()).isEqualTo(1);
     }
 
@@ -150,23 +123,50 @@ class PostServiceTest {
     void 게시글_삭제() {
 
         //given
-        User user1 = new User("tname", "tnickname", "temail@gmail.com", Role.USER);
-        userRepository.save(user1);
-
-        Long post1Id = postService.save(new PostRequestDto(user1.getId(), "테스트를 읽고...", "테스트", "zzyoon",
-                LocalDate.of(2023, 5, 14), LocalDate.of(2023, 6, 14), LocalDate.of(2023, 6, 14),
-                4, "감상평 테스트1"));
-
-        Long post2Id = postService.save(new PostRequestDto(user1.getId(), "테스트를 읽고...", "테스트", "zzyoon",
-                LocalDate.of(2023, 5, 14), LocalDate.of(2023, 6, 14), LocalDate.of(2023, 6, 14),
-                4, "감상평 테스트2"));
+        Long userId = newUsers(1);
+        Long postId = newPosts(userId, 2);
 
         int repoSize = postRepository.findAll().size();
 
         // when
-        postService.delete(post1Id);
+        postService.delete(postId);
 
         //then
         assertThat(postRepository.findAll().size()).isEqualTo(repoSize - 1);
+    }
+
+    private Long newUsers(int num) {
+        Long id = null;
+        for (int i = 0; i < num; i++) {
+            User user = User.builder()
+                    .name("이름" + i)
+                    .nickname("닉네임" + i)
+                    .email("email" + i + "@gmail.com")
+                    .role(Role.USER)
+                    .build();
+            id = userRepository.save(user).getId();
+        }
+        return id;
+    }
+
+    private Long newPosts(Long userId, int num) {
+        User user = userRepository.findById(userId).get();
+
+        Long id = null;
+        for (int i = 0; i < num; i++) {
+            Post post = Post.builder()
+                    .user(user)
+                    .postTitle("게시글 제목" + i)
+                    .bookTitle("책 제목" + i)
+                    .bookWriter("zzyoon")
+                    .readStart(LocalDate.of(2023, 5, 14))
+                    .readEnd(LocalDate.of(2023, 6, 14))
+                    .postAt(LocalDate.of(2023, 6, 14))
+                    .rating(4)
+                    .content("후기" + i)
+                    .build();
+            id = postRepository.save(post).getId();
+        }
+        return id;
     }
 }

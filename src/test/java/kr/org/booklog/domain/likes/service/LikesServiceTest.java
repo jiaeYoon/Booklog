@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 
@@ -23,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 class LikesServiceTest {
 
+    @Autowired EntityManager em;
     @Autowired LikesRepository likesRepository;
     @Autowired UserRepository userRepository;
     @Autowired PostRepository postRepository;
@@ -32,26 +34,15 @@ class LikesServiceTest {
     void 좋아요_등록() {
 
         //given : users, posts 미리 세팅
-        for (int i = 0; i < 3; i++) {
-            User user = new User("tname", "tnickname", "temail@gmail.com", Role.USER);
-            userRepository.save(user);
-        }
+        Long userId = newUsers(2);
+        Long postId = newPosts(userId, 3);
 
-        User user = userRepository.findTop1ByOrderByIdDesc();
-
-        for (int i = 0; i < 4; i++) {
-            Post post = new Post(user, "좋아요 등록 테스트를 읽고...", "좋아요 등록 테스트", "zzyoon",
-                    LocalDate.of(2023, 5, 14), LocalDate.of(2023, 6, 14), LocalDate.of(2023, 6, 14),
-                    4, "좋아요 등록 테스트", 0, 0);
-            Long postId = postRepository.save(post).getId();
-        }
-
-        Long postId = postRepository.findTop1ByOrderByIdDesc().getId();
+        em.clear();
 
         // when
         // 유저 2명이 한 포스트에 좋아요 등록
         LikesSaveRequestDto requestDto1 = new LikesSaveRequestDto();
-        requestDto1.setUserId(user.getId());
+        requestDto1.setUserId(userId);
 
         LikesSaveRequestDto requestDto2 = new LikesSaveRequestDto();
         requestDto2.setUserId(userRepository.findAll().get(1).getId());
@@ -59,10 +50,13 @@ class LikesServiceTest {
         Long likesId = likesService.save(postId, requestDto1);
         Long likesId2 = likesService.save(postId, requestDto2);
 
+        em.flush();
+        em.clear();
+
         //then
         Likes like = likesRepository.findById(likesId).get();
 
-        assertThat(like.getUser().getId()).isEqualTo(user.getId());
+        assertThat(like.getUser().getId()).isEqualTo(userId);
         assertThat(like.getIsLike()).isEqualTo(Boolean.TRUE);
         assertThat(postRepository.findById(postId).get().getLikesCnt()).isEqualTo(2);   // 두 명이 좋아요한 게시글의 좋아요 수 확인
     }
@@ -71,13 +65,9 @@ class LikesServiceTest {
     void 좋아요_취소() {
 
         //given
-        User user = new User("tname", "tnickname", "temail@gmail.com", Role.USER);
-        Long userId = userRepository.save(user).getId();
-
-        Post post = new Post(user, "좋아요 취소 테스트를 읽고...", "좋아요 취소 테스트", "zzyoon",
-                LocalDate.of(2023, 5, 14), LocalDate.of(2023, 6, 14), LocalDate.of(2023, 6, 14),
-                4, "좋아요 취소 테스트", 0, 0);
-        Long postId = postRepository.save(post).getId();
+        Long userId = newUsers(1);
+        Long postId = newPosts(userId,1);
+        em.clear();
 
         Long likesId = likesService.save(postId, new LikesSaveRequestDto(userId));
         int repoSize = likesRepository.findAll().size();
@@ -85,8 +75,47 @@ class LikesServiceTest {
         //when
         likesService.delete(postId, likesId);
 
+        em.flush();
+        em.clear();
+
         //then
         assertThat(likesRepository.findAll().size()).isEqualTo(repoSize - 1);
         assertThat(postRepository.findById(postId).get().getLikesCnt()).isEqualTo(0);
+    }
+
+    private Long newUsers(int num) {
+        Long id = null;
+        for (int i = 0; i < num; i++) {
+            User user = User.builder()
+                    .name("이름" + i)
+                    .nickname("닉네임" + i)
+                    .email("email" + i + "@gmail.com")
+                    .role(Role.USER)
+                    .build();
+            id = userRepository.save(user).getId();
+        }
+        return id;
+    }
+
+    private Long newPosts(Long userId, int num) {
+
+        User user = userRepository.findById(userId).get();
+
+        Long id = null;
+        for (int i = 0; i < num; i++) {
+            Post post = Post.builder()
+                    .user(user)
+                    .postTitle("게시글 제목" + i)
+                    .bookTitle("책 제목" + i)
+                    .bookWriter("zzyoon")
+                    .readStart(LocalDate.of(2023, 5, 14))
+                    .readEnd(LocalDate.of(2023, 6, 14))
+                    .postAt(LocalDate.of(2023, 6, 14))
+                    .rating(4)
+                    .content("후기" + i)
+                    .build();
+            id = postRepository.save(post).getId();
+        }
+        return id;
     }
 }
