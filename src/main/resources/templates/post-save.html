@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Post</title>
+</head>
+<body>
+<h1>Booklog</h1>
+<h3>새 글 작성</h3>
+    <form method="post" th:action="@{/posts/save}" th:object="${postForm}">
+        <div class="post-form">
+            <label th:for="postTitle">게시글 제목 : </label>
+            <input placeholder="게시글 제목을 입력하세요" th:field="*{postTitle}" type="text"/>
+            <label th:for="bookTitle">책 제목 : </label>
+            <input placeholder="책 제목을 입력하세요" th:field="*{bookTitle}" type="text"/>
+            <label th:for="bookWriter">작가 : </label>
+            <input placeholder="작가를 입력하세요" th:field="*{bookWriter}" type="text"/>
+            <label th:for="readStart">읽기 시작한 날 : </label>
+            <input th:field="*{readStart}" type="date"/>
+        </div>
+        <button type="submit">저장하기</button>
+    </form>
+</body>
+</html>
