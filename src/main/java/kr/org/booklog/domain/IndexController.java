@@ -26,6 +26,6 @@ public class IndexController {
 
     @GetMapping("/api/v1/posts/save")
     public String postsSave() {
-        return "post-save";
+        return "pre-post-save";
     }
 }
