@@ -27,5 +27,45 @@
         <button type="submit">저장하기</button>
         <button th:onclick="|location.href='@{/home}'|" type="button">목록보기</button>
     </form>
+    <table>
+        <tr>
+            <td href="#" th:if="${post.isLike == true}" th:onclick="|javascript:cancel(${post.id}, ${post.likeId})|">♥</td>
+            <td href="#" th:onclick="|javascript:like(${post.id})|" th:unless="${post.isLike == true}">♡</td>
+            <td th:text="${post.likesCnt}" type="text"></td>
+            <td th:text="|💬 ${post.commentsCnt}|" type="text"></td>
+        </tr>
+    </table>
+
 </body>
+<script>
+    function like(id) {
+        var form = document.createElement("form");
+        form.setAttribute("method", "post");
+        form.setAttribute("action", "/posts/" + id + "/likes");
+        document.body.appendChild(form);
+        form.submit();
+    }
+
+    function cancel(id, likeId) {
+        var form = document.createElement("form");
+
+        form.setAttribute("method", "get");
+        form.setAttribute("action", "/posts/" + id + "/likes");
+
+        // create element (input)
+        var input1 = document.createElement('input');
+        // set attribute (input)
+        input1.setAttribute("type", "hidden")
+        input1.setAttribute("name", "likeId")
+        input1.setAttribute("value", likeId)
+
+        // append input (to form)
+        form.appendChild(input1);
+
+        // append form (to body)
+        document.body.appendChild(form);
+
+        form.submit();
+    }
+</script>
 </html>

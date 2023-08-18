@@ -37,6 +37,25 @@ public class LikesService {
         return likesRepository.save(requestDto.toEntity()).getId();
     }
 
+    public Long save(Long postId, Long userId) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalStateException("해당 유저가 없습니다. id = " + userId));
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 감상평이 없습니다. id = " + postId));
+
+        Likes like = Likes.builder()
+                .user(user)
+                .post(post)
+                .isLike(Boolean.TRUE)
+                .build();
+
+        post.updateLikesCnt(post.getLikesCnt(), Boolean.TRUE);    // 게시글의 좋아요 수 업데이트(+1)
+
+        return likesRepository.save(like).getId();
+    }
+
     public void delete(Long postId, Long likeId) {
         Likes entity = likesRepository.findById(likeId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 감상평에 등록한 좋아요가 없습니다. id = " + likeId));
