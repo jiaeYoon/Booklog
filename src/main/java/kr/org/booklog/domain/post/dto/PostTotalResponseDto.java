@@ -18,10 +18,11 @@ public class PostTotalResponseDto {
     private LocalDateTime postAt;
     private Integer rating;
     private String content;
+    private Boolean isLike;
     private Integer likesCnt;
     private Integer commentsCnt;
 
-    public PostTotalResponseDto(Post post) {
+    public PostTotalResponseDto(Post post, Boolean isLike) {
         this.Id = post.getId();
         this.nickname = post.getUser().getNickname();
         this.postTitle = post.getPostTitle();
@@ -29,6 +30,7 @@ public class PostTotalResponseDto {
         this.postAt = post.getPostAt();
         this.rating = post.getRating();
         this.content = post.getContent();
+        this.isLike = isLike;
         this.likesCnt = post.getLikesCnt();
         this.commentsCnt = post.getCommentsCnt();
     }

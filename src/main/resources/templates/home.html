@@ -17,6 +17,9 @@
             <th>게시한 날짜</th>
             <th>평점</th>
             <th>후기</th>
+            <th>댓글 수</th>
+            <th>좋아요 수</th>
+            <th>좋아요 여부</th>
         </tr>
         </thead>
         <tbody>
@@ -28,6 +31,10 @@
             <td th:text="${post.postAt}"></td>
             <td th:text="${post.rating}"></td>
             <td th:text="${post.content}"></td>
+            <td th:text="${post.commentsCnt}"></td>
+            <td th:text="${post.likesCnt}"></td>
+            <td th:if="${post.isLike == true}" th:onclick="|location.href='@{/home}'|">♥</td>
+            <td th:unless="${post.isLike == true}">♡</td>
         </tr>
         </tbody>
     </table>

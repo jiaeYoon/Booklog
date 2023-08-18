@@ -2,6 +2,7 @@ package kr.org.booklog.domain.post.service;
 
 import kr.org.booklog.domain.like.entity.Likes;
 import kr.org.booklog.domain.like.repository.LikesRepository;
+import kr.org.booklog.domain.like.service.LikesService;
 import kr.org.booklog.domain.post.dto.PostRequestDto;
 import kr.org.booklog.domain.post.dto.PostResponseDto;
 import kr.org.booklog.domain.post.dto.PostTotalResponseDto;
@@ -10,7 +11,6 @@ import kr.org.booklog.domain.post.repository.PostRepository;
 import kr.org.booklog.domain.user.entity.User;
 import kr.org.booklog.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,11 +33,13 @@ public class PostService {
         return postRepository.save(requestDto.toEntity()).getId();
     }
 
-    public List<PostTotalResponseDto> findAll() {
+    public List<PostTotalResponseDto> findAll(Long userId) {
         List<Post> posts = postRepository.findAllPosts();
         List<PostTotalResponseDto> responseDto = new ArrayList<>();
         for (Post post : posts) {
-            responseDto.add(new PostTotalResponseDto(post));
+            Likes like = likesRepository.isLike(userId, post.getId());
+            Boolean isLike = like != null && like.getIsLike();
+            responseDto.add(new PostTotalResponseDto(post, isLike));
         }
         return responseDto;
     }
