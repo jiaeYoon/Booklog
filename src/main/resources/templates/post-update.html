@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Post</title>
+</head>
+<body>
+    <h1>Booklog</h1>
+    <h3>글 수정하기</h3>
+    <div th:text="${post.postTitle}"></div>
+    <form method="post" th:action="@{/posts/{id}(id=${post.id})}" th:object="${postForm}">
+        <label th:for="postTitle">게시글 제목 : </label>
+        <input id="postTitle" name="postTitle" placeholder="게시글 제목을 입력하세요" th:value="${post.postTitle}" type="text"/>
+        <label th:for="bookTitle">책 제목 : </label>
+        <input id="bookTitle" name="bookTitle" placeholder="책 제목을 입력하세요" th:value="${post.bookTitle}" type="text"/>
+        <label th:for="bookWriter">작가 : </label>
+        <input id="bookWriter" name="bookWriter" placeholder="작가를 입력하세요" th:value="${post.bookWriter}" type="text"/>
+        <label th:for="readStart">읽기 시작한 날 : </label>
+        <input id="readStart" name="readStart" th:value="${post.readStart}" type="date"/>
+        <label th:for="readEnd">다 읽은 날 : </label>
+        <input id="readEnd" name="readEnd" th:value="${post.readEnd}" type="date"/>
+        <label th:for="rating">평점 : </label>
+        <input id="rating" name="rating" placeholder="평점을 입력하세요" th:value="${post.rating}" type="text"/>
+        <label th:for="content">후기 : </label>
+        <input id="content" name="content" placeholder="후기를 입력하세요" th:value="${post.content}" type="text"/>
+        <input id="postAt" name="postAt" th:value="${post.postAt}" type="hidden">
+        <button type="submit">저장하기</button>
+        <button th:onclick="|location.href='@{/home}'|" type="button">목록보기</button>
+    </form>
+</body>
+</html>

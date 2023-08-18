@@ -96,4 +96,36 @@ public class PostController {
         return "home";
 
     }
+
+    @GetMapping("/posts/{id}")
+    public String findById(@PathVariable Long id, Model model) {
+
+        Long userId = userRepository.findById(1L).get().getId();
+        PostResponseDto post = postService.findById(id, userId);
+
+        model.addAttribute("post", post);
+        return "post-update";
+    }
+
+    @PostMapping("posts/{id}")
+    public String updatePost(@PathVariable Long id, PostForm form, BindingResult result) {
+
+        if (result.hasErrors()) {
+            System.out.println("form error");
+            return "post-update";
+        }
+
+        PostRequestDto requestDto = PostRequestDto.builder()
+                .postTitle(form.getPostTitle())
+                .bookTitle(form.getBookTitle())
+                .bookWriter(form.getBookWriter())
+                .readStart(form.getReadStart())
+                .readEnd(form.getReadEnd())
+                .postAt(form.getPostAt())
+                .rating(form.getRating())
+                .content(form.getContent())
+                .build();
+        postService.update(id, requestDto);
+        return "redirect:/";
+    }
 }
