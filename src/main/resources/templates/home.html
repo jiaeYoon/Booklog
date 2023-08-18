@@ -6,6 +6,12 @@
 </head>
 <body>
     <h1>Booklog</h1>
+    <fieldset>
+        <legend>Login User Info</legend>
+        <div th:text="|id : ${user.id}|"></div>
+        <div th:text="|nickname : ${user.nickname}|"></div>
+    </fieldset>
+
     <button th:onclick="|location.href='@{/posts/save}'|" type="button">글 작성하기</button>
     <table border="1">
         <thead>

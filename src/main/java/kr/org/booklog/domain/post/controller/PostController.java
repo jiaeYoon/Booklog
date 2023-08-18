@@ -94,7 +94,9 @@ public class PostController {
 
     @GetMapping("/home")
     public String findAll(Model model) {
-        List<PostTotalResponseDto> posts = postService.findAll();
+        User user = userRepository.findById(1L).get();
+        List<PostTotalResponseDto> posts = postService.findAll(user.getId());
+        model.addAttribute("user", user);
         model.addAttribute("posts", posts);
         return "home";
 

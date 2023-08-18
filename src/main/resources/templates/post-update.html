@@ -7,7 +7,6 @@
 <body>
     <h1>Booklog</h1>
     <h3>글 수정하기</h3>
-    <div th:text="${post.postTitle}"></div>
     <form method="post" th:action="@{/posts/{id}(id=${post.id})}" th:object="${postForm}">
         <label th:for="postTitle">게시글 제목 : </label>
         <input id="postTitle" name="postTitle" placeholder="게시글 제목을 입력하세요" th:value="${post.postTitle}" type="text"/>
