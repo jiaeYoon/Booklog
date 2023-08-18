@@ -34,7 +34,7 @@ public class PostService {
     }
 
     public List<PostTotalResponseDto> findAll() {
-        List<Post> posts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "postAt"));
+        List<Post> posts = postRepository.findAllPosts();
         List<PostTotalResponseDto> responseDto = new ArrayList<>();
         for (Post post : posts) {
             responseDto.add(new PostTotalResponseDto(post));
