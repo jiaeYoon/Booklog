@@ -59,9 +59,9 @@ public class CommentService {
         return id;
     }
 
-    public void delete(Long id) {
-        Comment comment = commentRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("해당 댓글이 없습니다. id = " + id));
+    public void delete(Long commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new NoSuchElementException("해당 댓글이 없습니다. id = " + commentId));
 
         Post post = comment.getPost();
         post.updateCommentsCnt(post.getCommentsCnt(), Boolean.FALSE);   // 게시글의 댓글 수 업데이트(-1)

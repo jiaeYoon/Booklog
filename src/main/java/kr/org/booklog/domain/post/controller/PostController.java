@@ -1,5 +1,7 @@
 package kr.org.booklog.domain.post.controller;
 
+import kr.org.booklog.domain.comment.dto.CommentResponseDto;
+import kr.org.booklog.domain.comment.service.CommentService;
 import kr.org.booklog.domain.post.dto.PostRequestDto;
 import kr.org.booklog.domain.post.dto.PostResponseDto;
 import kr.org.booklog.domain.post.dto.PostTotalResponseDto;
@@ -22,6 +24,7 @@ import java.util.List;
 public class PostController {
 
     private final PostService postService;
+    private final CommentService commentService;
     private final UserRepository userRepository;
 
     // TODO : Api Response 추가
@@ -102,8 +105,10 @@ public class PostController {
 
         Long userId = userRepository.findById(1L).get().getId();
         PostResponseDto post = postService.findById(id, userId);
-
+        List<CommentResponseDto> commenets = commentService.findAll(id);
         model.addAttribute("post", post);
+        model.addAttribute("comments", commenets);
+        model.addAttribute("commentForm", new CommentResponseDto());
         return "post-update";
     }
 

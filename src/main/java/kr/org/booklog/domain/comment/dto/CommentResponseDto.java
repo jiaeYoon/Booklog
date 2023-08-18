@@ -2,21 +2,23 @@ package kr.org.booklog.domain.comment.dto;
 
 import kr.org.booklog.domain.comment.entity.Comment;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Getter
+@NoArgsConstructor
 public class CommentResponseDto {
 
     private Long id;
     private String nickname;
     private String content;
-    private LocalDate commentAt;
+    private String commentAt;
 
     public CommentResponseDto(Comment comment) {
         this.id = comment.getId();
         this.nickname = comment.getUser().getNickname();
         this.content = comment.getContent();
-        this.commentAt = LocalDate.from(comment.getCreatedAt());
+        this.commentAt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(comment.getCreatedAt());
     }
 }
