@@ -39,7 +39,7 @@
             <td th:text="${post.content}"></td>
             <td th:text="${post.commentsCnt}"></td>
             <td th:text="${post.likesCnt}"></td>
-            <td th:if="${post.isLike == true}" th:onclick="|location.href='@{/home}'|">♥</td>
+            <td th:if="${post.isLike == true}">♥</td>
             <td th:unless="${post.isLike == true}">♡</td>
         </tr>
         </tbody>
