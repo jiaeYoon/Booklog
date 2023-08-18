@@ -7,6 +7,7 @@ import kr.org.booklog.domain.post.service.PostService;
 import kr.org.booklog.domain.user.entity.User;
 import kr.org.booklog.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +16,8 @@ import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 
-@RequestMapping("/api/v1")
-@RestController
+//@RequestMapping("/api/v1")
+@Controller
 @RequiredArgsConstructor
 public class PostController {
 
@@ -24,38 +25,38 @@ public class PostController {
     private final UserRepository userRepository;
 
     // TODO : Api Response 추가
-    @PostMapping("/posts")
-    public Long savePost(@RequestBody PostRequestDto requestDto) {
-        return postService.save(requestDto);
-    }
+//    @PostMapping("/posts")
+//    public Long savePost(@RequestBody PostRequestDto requestDto) {
+//        return postService.save(requestDto);
+//    }
+//
+//    @GetMapping("/posts")
+//    public List<PostTotalResponseDto> findAll() {
+//        return postService.findAll();
+//    }
+//
+//    @GetMapping("/posts/{id}")
+//    public PostResponseDto findById(@PathVariable Long id, Long userId) {
+//        return postService.findById(id, userId);
+//    }
+//
+//    @PatchMapping("posts/{id}")
+//    public Long updatePost(@PathVariable Long id, @RequestBody PostRequestDto requestDto) {
+//        return postService.update(id, requestDto);
+//    }
+//
+//    @DeleteMapping("/posts/{id}")
+//    public Long delete(@PathVariable Long id) {
+//        postService.delete(id);
+//        return id;
+//    }
 
-    @GetMapping("/posts")
-    public List<PostTotalResponseDto> findAll() {
-        return postService.findAll();
-    }
-
-    @GetMapping("/posts/{id}")
-    public PostResponseDto findById(@PathVariable Long id, Long userId) {
-        return postService.findById(id, userId);
-    }
-
-    @PatchMapping("posts/{id}")
-    public Long updatePost(@PathVariable Long id, @RequestBody PostRequestDto requestDto) {
-        return postService.update(id, requestDto);
-    }
-
-    @DeleteMapping("/posts/{id}")
-    public Long delete(@PathVariable Long id) {
-        postService.delete(id);
-        return id;
-    }
-
-    @GetMapping("/home")
-    public String home(Model model) {
-        User user = User.builder().name("userA").build();
-        model.addAttribute(user);
-        return "home";
-    }
+//    @GetMapping("/home")
+//    public String home(Model model) {
+//        User user = User.builder().name("userA").build();
+//        model.addAttribute(user);
+//        return "home";
+//    }
 
     @GetMapping("/posts/save")
     public String loadForm(Model model) {
@@ -83,5 +84,13 @@ public class PostController {
 
         postService.save(dto);
         return "redirect:/";
+    }
+
+    @GetMapping("/home")
+    public String findAll(Model model) {
+        List<PostTotalResponseDto> posts = postService.findAll();
+        model.addAttribute("posts", posts);
+        return "home";
+
     }
 }
