@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -15,7 +15,7 @@ public class PostTotalResponseDto {
     private String nickname;
     private String postTitle;
     private String bookTitle;
-    private LocalDate postAt;
+    private LocalDateTime postAt;
     private Integer rating;
     private String content;
     private Integer likesCnt;

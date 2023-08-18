@@ -13,7 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 //@RequestMapping("/api/v1")
@@ -79,7 +79,10 @@ public class PostController {
                 .bookTitle(form.getBookTitle())
                 .bookWriter(form.getBookWriter())
                 .readStart(form.getReadStart())
-                .postAt(LocalDate.now())
+                .readEnd(form.getReadEnd())
+                .postAt(LocalDateTime.now())
+                .rating(form.getRating())
+                .content(form.getContent())
                 .build();
 
         postService.save(dto);

@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter @Setter
 public class PostForm {
@@ -20,7 +21,7 @@ public class PostForm {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate readEnd;
 
-    private LocalDate postAt;
+    private LocalDateTime postAt;
     private Integer rating;
     private String content;
 

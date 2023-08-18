@@ -11,6 +11,7 @@ import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -45,7 +46,7 @@ public class Post {
     private LocalDate readEnd;
 
     @NotNull
-    private LocalDate postAt;
+    private LocalDateTime postAt;
 
     @NotNull
     @Column(columnDefinition = "tinyint")
@@ -65,7 +66,7 @@ public class Post {
 
     @Builder
     public Post(User user, String postTitle, String bookTitle, String bookWriter,
-                LocalDate readStart, LocalDate readEnd, LocalDate postAt, Integer rating, String content, Integer likesCnt, Integer commentsCnt) {
+                LocalDate readStart, LocalDate readEnd, LocalDateTime postAt, Integer rating, String content, Integer likesCnt, Integer commentsCnt) {
         this.user = user;
         this.postTitle = postTitle;
         this.bookTitle = bookTitle;

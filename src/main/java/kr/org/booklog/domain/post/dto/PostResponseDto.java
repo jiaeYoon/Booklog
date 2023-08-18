@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -16,7 +17,7 @@ public class PostResponseDto {
     private String bookWriter;
     private LocalDate readStart;
     private LocalDate readEnd;
-    private LocalDate postAt;
+    private LocalDateTime postAt;
     private Integer rating;
     private String content;
     private Long likeId;
