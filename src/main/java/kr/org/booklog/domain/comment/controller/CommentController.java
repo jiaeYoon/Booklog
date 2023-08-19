@@ -19,11 +19,6 @@ public class CommentController {
 
     private final CommentService commentService;
 
-//    @PostMapping("/comments")
-//    public Long save(@RequestBody CommentRequestDto requestDto) {
-//        return commentService.save(requestDto);
-//    }
-
     @PostMapping("/comments")
     public String save(CommentRequestDto requestDto, BindingResult result, HttpServletRequest request) {
 
@@ -37,11 +32,7 @@ public class CommentController {
         return "redirect:"+ referer;
     }
 
-//    @GetMapping("/posts/{id}/comments")
-//    public List<CommentResponseDto> findAll(@PathVariable Long id) {
-//        return commentService.findAll(id);
-//    }
-    @GetMapping("/comments/{id}")
+    @DeleteMapping("/comments/{id}")
     public String delete(@PathVariable Long id, HttpServletRequest request) {
 
         commentService.delete(id);
@@ -53,10 +44,5 @@ public class CommentController {
 //    @PatchMapping("/comments/{id}")
 //    public Long update(@PathVariable Long id, @RequestBody CommentRequestDto requestDto) {
 //        return commentService.update(id, requestDto);
-//    }
-//
-//    @DeleteMapping("/comments/{id}")
-//    public void delete(@PathVariable Long id) {
-//        commentService.delete(id);
 //    }
 }

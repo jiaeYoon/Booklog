@@ -18,10 +18,6 @@ public class LikesController {
 
     private final LikesService likesService;
 
-//    @PostMapping("/posts/{id}/likes")
-//    public Long save(@PathVariable Long id, @RequestBody LikesSaveRequestDto requestDto) {
-//        return likesService.save(id, requestDto);
-//    }
     @PostMapping("/posts/{id}/likes")
     public String save(@PathVariable Long id, HttpServletRequest request) {
         Long userId = 1L;
@@ -30,15 +26,9 @@ public class LikesController {
         return "redirect:"+ referer;
     }
 
-//    @DeleteMapping("/posts/{id}/likes")
-//    public void delete(@PathVariable Long id, @RequestParam Long likeId) {
-//        likesService.delete(id, likeId);
-//    }
-
-    @GetMapping("/posts/{id}/likes")
-    public String delete(@PathVariable Long id, @RequestParam String likeId, HttpServletRequest request) {
-        System.out.println("likeId = " + likeId);
-        likesService.delete(id, Long.parseLong(likeId));
+    @DeleteMapping("/posts/{id}/likes")
+    public String delete(@PathVariable Long id, @RequestParam Long likeId, HttpServletRequest request) {
+        likesService.delete(id, likeId);
         String referer = request.getHeader("Referer");
         return "redirect:"+ referer;
     }

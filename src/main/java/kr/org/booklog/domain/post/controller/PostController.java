@@ -105,16 +105,16 @@ public class PostController {
     @GetMapping("/posts/{id}")
     public String findById(@PathVariable Long id, Model model) {
 
-        Long userId = userRepository.findById(1L).get().getId();
+        Long userId = 1L;
         PostResponseDto post = postService.findById(id, userId);
         List<CommentResponseDto> commenets = commentService.findAll(id);
-        model.addAttribute("post", post);
+        model.addAttribute("post_", post);
         model.addAttribute("comments", commenets);
         model.addAttribute("commentForm", new CommentResponseDto());
         return "post-update";
     }
 
-    @PostMapping("posts/{id}")
+    @PutMapping("posts/{id}")
     public String updatePost(@PathVariable Long id, PostForm form, BindingResult result) {
 
         if (result.hasErrors()) {
@@ -132,7 +132,9 @@ public class PostController {
                 .rating(form.getRating())
                 .content(form.getContent())
                 .build();
+
         postService.update(id, requestDto);
+
         return "redirect:/";
     }
 }

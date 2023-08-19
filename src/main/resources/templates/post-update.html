@@ -7,31 +7,32 @@
 <body>
     <h1>Booklog</h1>
     <h3>글 수정하기</h3>
-    <form method="post" th:action="@{/posts/{id}(id=${post.id})}" th:object="${postForm}">
+    <form method="post" th:action th:object="${postForm}">
+        <input name="_method" type="hidden" value="put"/>
         <label th:for="postTitle">게시글 제목 : </label>
-        <input id="postTitle" name="postTitle" placeholder="게시글 제목을 입력하세요" th:value="${post.postTitle}" type="text"/>
+        <input id="postTitle" name="postTitle" placeholder="게시글 제목을 입력하세요" th:value="${post_.postTitle}" type="text"/>
         <label th:for="bookTitle">책 제목 : </label>
-        <input id="bookTitle" name="bookTitle" placeholder="책 제목을 입력하세요" th:value="${post.bookTitle}" type="text"/>
+        <input id="bookTitle" name="bookTitle" placeholder="책 제목을 입력하세요" th:value="${post_.bookTitle}" type="text"/>
         <label th:for="bookWriter">작가 : </label>
-        <input id="bookWriter" name="bookWriter" placeholder="작가를 입력하세요" th:value="${post.bookWriter}" type="text"/>
+        <input id="bookWriter" name="bookWriter" placeholder="작가를 입력하세요" th:value="${post_.bookWriter}" type="text"/>
         <label th:for="readStart">읽기 시작한 날 : </label>
-        <input id="readStart" name="readStart" th:value="${post.readStart}" type="date"/>
+        <input id="readStart" name="readStart" th:value="${post_.readStart}" type="date"/>
         <label th:for="readEnd">다 읽은 날 : </label>
-        <input id="readEnd" name="readEnd" th:value="${post.readEnd}" type="date"/>
+        <input id="readEnd" name="readEnd" th:value="${post_.readEnd}" type="date"/>
         <label th:for="rating">평점 : </label>
-        <input id="rating" name="rating" placeholder="평점을 입력하세요" th:value="${post.rating}" type="text"/>
+        <input id="rating" name="rating" placeholder="평점을 입력하세요" th:value="${post_.rating}" type="text"/>
         <label th:for="content">후기 : </label>
-        <input id="content" name="content" placeholder="후기를 입력하세요" th:value="${post.content}" type="text"/>
-        <input id="postAt" name="postAt" th:value="${post.postAt}" type="hidden">
+        <input id="content" name="content" placeholder="후기를 입력하세요" th:value="${post_.content}" type="text"/>
+        <input id="postAt" name="postAt" th:value="${post_.postAt}" type="hidden">
         <button type="submit">저장하기</button>
         <button th:onclick="|location.href='@{/home}'|" type="button">목록보기</button>
     </form>
     <table>
         <tr>
-            <td href="#" th:if="${post.isLike == true}" th:onclick="|javascript:cancel(${post.id}, ${post.likeId})|">♥</td>
-            <td href="#" th:onclick="|javascript:like(${post.id})|" th:unless="${post.isLike == true}">♡</td>
-            <td th:text="${post.likesCnt}" type="text"></td>
-            <td th:text="|💬 ${post.commentsCnt}|" type="text"></td>
+            <td href="#" th:if="${post_.isLike == true}" th:onclick="|javascript:cancel(${post_.id}, ${post_.likeId})|">♥</td>
+            <td href="#" th:onclick="|javascript:like(${post_.id})|" th:unless="${post_.isLike == true}">♡</td>
+            <td th:text="${post_.likesCnt}" type="text"></td>
+            <td th:text="|💬 ${post_.commentsCnt}|" type="text"></td>
         </tr>
     </table>
     <table border="1">
@@ -55,7 +56,7 @@
     </table>
     <form method="post" th:action="@{/comments}" th:object="${commentForm}">
         <input th:field="*{content}" type="text">
-        <input id="postId" name="postId" th:value="${post.id}" type="hidden">
+        <input id="postId" name="postId" th:value="${post_.id}" type="hidden">
         <button type="submit">댓글달기</button>
     </form>
 </body>
@@ -71,8 +72,14 @@
     function cancel(id, likeId) {
         var form = document.createElement("form");
 
-        form.setAttribute("method", "get");
+        form.setAttribute("method", "post");
         form.setAttribute("action", "/posts/" + id + "/likes");
+
+        // set method to delete
+        var m = document.createElement('input');
+        m.setAttribute("type", "hidden");
+        m.setAttribute("name", "_method");
+        m.setAttribute("value", "delete");
 
         // create element (input)
         var input1 = document.createElement('input');
@@ -82,6 +89,7 @@
         input1.setAttribute("value", likeId)
 
         // append input (to form)
+        form.appendChild(m);
         form.appendChild(input1);
 
         // append form (to body)
@@ -89,11 +97,24 @@
 
         form.submit();
     }
+
     function deleteComment(id) {
+
         var form = document.createElement("form");
-        form.setAttribute("method", "get");
+
+        form.setAttribute("method", "post");
         form.setAttribute("action", "/comments/" + id);
+
+        // set method to delete
+        var m = document.createElement('input');
+        m.setAttribute("type", "hidden");
+        m.setAttribute("name", "_method");
+        m.setAttribute("value", "delete");
+
+        form.appendChild(m);
+
         document.body.appendChild(form);
+
         form.submit();
     }
 </script>
