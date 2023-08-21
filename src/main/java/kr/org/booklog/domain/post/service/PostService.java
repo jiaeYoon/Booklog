@@ -60,15 +60,15 @@ public class PostService {
     public PostResponseDto findById(Long id, Long userId) {
         PostResponseDto post = postRepository.findPostById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id = " + id));
-        PostResponseDto responseDto = new PostResponseDto(post);
         
         // 게시글의 좋아요 여부 조회
         Likes like = likesRepository.isLike(userId, post.getId());
+        Long likeId = like != null ? like.getId() : null;
         Boolean isLike = like != null;
-        post.setLikeId(like.getId());
+        post.setLikeId(likeId);
         post.setIsLike(isLike);
 
-        return responseDto;
+        return post;
     }
 
     @Transactional
