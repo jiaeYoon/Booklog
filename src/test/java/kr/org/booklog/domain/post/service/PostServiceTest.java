@@ -97,20 +97,21 @@ class PostServiceTest {
     @Test
     void 특정_게시글_조회() {
         //given
-        User user1 = new User("user1", "nickname1", "email1@gmail.com", Role.USER);
-        userRepository.save(user1);
+        Long userId1 = newUsers(1).get(0);
+        Long postId = newPosts(userId1, 2).get(0);
 
-        User user2 = new User("user2", "nickname2", "email2@gmail.com", Role.USER);
-        userRepository.save(user2);
+        em.flush();
+        em.clear();
 
-        Long postId = newPosts(user1.getId(), 1);
+        likesService.save(postId, userId1);
 
         //when
-        PostResponseDto responseDto1 = postService.findById(postId, user1.getId());
-        PostResponseDto responseDto2 = postService.findById(postId, user2.getId());
+        PostResponseDto responseDto = postService.findById(postId, userId1);
 
         //then
-        assertThat(responseDto1.getPostTitle()).isEqualTo("게시글 제목0");
+        assertThat(responseDto.getPostTitle()).isEqualTo("게시글 제목0");
+        assertThat(responseDto.getNickname()).isEqualTo("닉네임0");
+        assertThat(responseDto.getLikesCnt()).isEqualTo(1);
     }
 
     @Test
