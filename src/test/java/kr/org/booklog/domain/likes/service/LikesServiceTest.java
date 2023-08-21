@@ -44,8 +44,8 @@ class LikesServiceTest {
         em.clear();
 
         // when : 유저 2명이 한 포스트에 좋아요 등록
-        Long likesId = likesService.save(postId, userId1);
-        Long likesId2 = likesService.save(postId, userId2);
+        Long likesId = likesService.save(userId1, postId);
+        Long likesId2 = likesService.save(userId2, postId);
 
         //then
         assertThat(likesRepository.findByPostId(postId).size()).isEqualTo(2);
@@ -62,7 +62,7 @@ class LikesServiceTest {
         em.flush(); // post 엔티티의 default value 적용을 위한 플러시 및 영속성 컨텍스트 초기화
         em.clear();
 
-        Long likesId = likesService.save(postId, userId);
+        Long likesId = likesService.save(userId, postId);
 
         //when
         likesService.delete(postId, likesId);

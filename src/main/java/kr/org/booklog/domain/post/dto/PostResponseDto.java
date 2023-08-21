@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 public class PostResponseDto {
     private Long id;
-    private String writerNickname;
+    private String nickname;
     private String postTitle;
     private String bookTitle;
     private String bookWriter;
@@ -30,7 +30,7 @@ public class PostResponseDto {
 
     public PostResponseDto(Post post) {
         this.id = post.getId();
-        this.writerNickname = post.getUser().getNickname();
+        this.nickname = post.getUser().getNickname();
         this.postTitle = post.getPostTitle();
         this.bookTitle = post.getBookTitle();
         this.bookWriter = post.getBookWriter();

@@ -19,7 +19,7 @@ public class LikesService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
 
-    public Long save(Long postId, Long userId) {
+    public Long save(Long userId, Long postId) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalStateException("해당 유저가 없습니다. id = " + userId));

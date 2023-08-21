@@ -68,16 +68,16 @@ public class PostController {
     }
 
     @PostMapping("/posts/save")
-    public String create(@Valid PostForm form, BindingResult result) {
+    public String save(@Valid PostForm form, BindingResult result) {
 
         if (result.hasErrors()) {
             System.out.println("form error");
             return "post-save";
         }
 
-        User user = userRepository.findById(1L).get();
+        Long userId = 1L;
         PostRequestDto dto = PostRequestDto.builder()
-                .userId(user.getId())
+                .userId(userId)
                 .postTitle(form.getPostTitle())
                 .bookTitle(form.getBookTitle())
                 .bookWriter(form.getBookWriter())

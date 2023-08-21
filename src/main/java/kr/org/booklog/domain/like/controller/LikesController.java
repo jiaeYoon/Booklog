@@ -16,7 +16,7 @@ public class LikesController {
     @PostMapping("/posts/{id}/likes")
     public String save(@PathVariable Long id, HttpServletRequest request) {
         Long userId = 1L;
-        likesService.save(id, userId);
+        likesService.save(userId, id);
         String referer = request.getHeader("Referer");
         return "redirect:"+ referer;
     }
