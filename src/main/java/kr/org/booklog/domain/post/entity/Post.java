@@ -2,6 +2,7 @@ package kr.org.booklog.domain.post.entity;
 
 import com.sun.istack.NotNull;
 import kr.org.booklog.domain.comment.entity.Comment;
+import kr.org.booklog.domain.like.entity.Likes;
 import kr.org.booklog.domain.post.dto.PostRequestDto;
 import kr.org.booklog.domain.user.entity.User;
 import lombok.Builder;
@@ -30,7 +31,10 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Likes> likes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
 
     @NotNull
