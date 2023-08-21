@@ -1,6 +1,7 @@
 package kr.org.booklog.domain.post.entity;
 
 import com.sun.istack.NotNull;
+import kr.org.booklog.domain.comment.entity.Comment;
 import kr.org.booklog.domain.post.dto.PostRequestDto;
 import kr.org.booklog.domain.user.entity.User;
 import lombok.Builder;
@@ -12,6 +13,8 @@ import org.hibernate.annotations.DynamicInsert;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -26,6 +29,9 @@ public class Post {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
+    private List<Comment> comments = new ArrayList<>();
 
     @NotNull
     @Column(columnDefinition = "varchar(30)")

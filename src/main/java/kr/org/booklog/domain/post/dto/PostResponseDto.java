@@ -1,11 +1,13 @@
 package kr.org.booklog.domain.post.dto;
 
+import kr.org.booklog.domain.comment.entity.Comment;
 import kr.org.booklog.domain.post.entity.Post;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -24,6 +26,7 @@ public class PostResponseDto {
     private Boolean isLike;
     private Integer likesCnt;
     private Integer commentsCnt;
+    private List<Comment> comments;
 
     public PostResponseDto(Post post) {
         this.id = post.getId();
@@ -38,5 +41,6 @@ public class PostResponseDto {
         this.content = post.getContent();
         this.likesCnt = post.getLikesCnt();
         this.commentsCnt = post.getCommentsCnt();
+        this.comments = post.getComments();
     }
 }
