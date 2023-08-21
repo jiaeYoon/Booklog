@@ -70,14 +70,28 @@ class PostServiceTest {
     void 전체_게시글_조회() {
 
         //given
-        Long userId = newUsers(1);
-        newPosts(userId, 3);
+        Long userId1 = newUsers(1).get(0);
+        List<Long> postIds = newPosts(userId1, 2);
+        Long postId1 = postIds.get(0);
+        Long postId2 = postIds.get(1);
+
+        em.flush();
+        em.clear();
+
+        likesService.save(postId1, userId1);
 
         //when
-        List<PostTotalResponseDto> responseDto = postService.findAll();
+        List<PostTotalResponseDto> posts = postService.findAll(userId1); // postAt 기준 내림차순 정렬
 
         //then
-        assertThat(responseDto.size()).isEqualTo(3);
+        assertThat(posts.size()).isEqualTo(2);
+
+        assertThat(posts.get(1).getLikesCnt()).isEqualTo(1);
+        assertThat(posts.get(1).getCommentsCnt()).isEqualTo(0);
+        assertThat(posts.get(1).getIsLike()).isEqualTo(true);
+
+        assertThat(posts.get(0).getLikesCnt()).isEqualTo(0);
+        assertThat(posts.get(0).getIsLike()).isEqualTo(false);
     }
 
     @Test
