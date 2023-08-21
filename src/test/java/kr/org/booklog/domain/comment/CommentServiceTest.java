@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -34,11 +35,8 @@ class CommentServiceTest {
     void 댓글_등록() {
 
         // given
-        User user = newUser();
-        Long userId = userRepository.save(user).getId();
-
-        Post post = newPost(user);
-        Long postId = postRepository.save(post).getId();
+        Long userId = newUser();
+        Long postId = newPost(userId);
 
         em.clear();
 
@@ -48,17 +46,17 @@ class CommentServiceTest {
 
         // then
         assertThat(commentRepository.findById(commentId).get().getContent()).isEqualTo("댓글1");
+        assertThat(commentRepository.findByPostId(commentId).size()).isEqualTo(1);
+        assertThat(postRepository.findById(postId).get().getCommentsCnt()).isEqualTo(1);
+        assertThat(postRepository.findById(postId).get().getComments().get(0).getContent()).isEqualTo("댓글1");
     }
 
     @Test
     void 댓글_조회() {
 
         // given
-        User user = newUser();
-        Long userId = userRepository.save(user).getId();
-
-        Post post = newPost(user);
-        Long postId = postRepository.save(post).getId();
+        Long userId = newUser();
+        Long postId = newPost(userId);
 
         em.clear();
 
@@ -75,11 +73,8 @@ class CommentServiceTest {
     @Test
     void 댓글_수정() {
         // given
-        User user = newUser();
-        Long userId = userRepository.save(user).getId();
-
-        Post post = newPost(user);
-        Long postId = postRepository.save(post).getId();
+        Long userId = newUser();
+        Long postId = newPost(userId);
 
         em.clear();
 
@@ -92,23 +87,21 @@ class CommentServiceTest {
         // then
         assertThat(commentRepository.findById(commentId).get().getContent()).isEqualTo("댓글2");
         assertThat(commentRepository.findById(commentId).get().getContent()).isNotEqualTo("댓글1");
+        assertThat(postRepository.findById(postId).get().getComments().get(0).getContent()).isEqualTo("댓글2");
     }
 
     @Test
     void 댓글_삭제() {
         // given
-        User user = newUser();
-        Long userId = userRepository.save(user).getId();
-
-        Post post = newPost(user);
-        Long postId = postRepository.save(post).getId();
+        Long userId = newUser();
+        Long postId = newPost(userId);
 
         em.clear();
 
-        int before_delete_size = commentRepository.findAll().size();
-        Integer before_delete_comments_cnt = postRepository.findById(postId).get().getCommentsCnt();
-
         Long commentId = commentService.save(new CommentRequestDto(userId, postId, "댓글1"));
+
+        em.flush();
+        em.clear();
 
         // when
         commentService.delete(commentId);
@@ -117,30 +110,35 @@ class CommentServiceTest {
         em.clear();
 
         // then
-        assertThat(commentRepository.findAll().size()).isEqualTo(before_delete_size);
-        assertThat(postRepository.findById(postId).get().getCommentsCnt()).isEqualTo(before_delete_comments_cnt);
+        assertThat(commentRepository.findByPostId(postId).size()).isEqualTo(0);
+        assertThat(postRepository.findById(postId).get().getCommentsCnt()).isEqualTo(0);
     }
     
-    private User newUser() {
-        return User.builder()
+    private Long newUser() {
+        User user = User.builder()
                 .name("유저A")
                 .nickname("닉네임")
                 .email("email@gmail.com")
                 .role(Role.USER)
                 .build();
+        userRepository.save(user);
+        return user.getId();
     }
 
-    private Post newPost(User user) {
-        return Post.builder()
+    private Long newPost(Long userId) {
+        User user = userRepository.findById(userId).get();
+        Post post = Post.builder()
                 .user(user)
                 .postTitle("게시글 제목")
                 .bookTitle("책 제목")
                 .bookWriter("zzyoon")
                 .readStart(LocalDate.of(2023, 5, 14))
                 .readEnd(LocalDate.of(2023, 6, 14))
-                .postAt(LocalDate.of(2023, 6, 14))
+                .postAt(LocalDateTime.now())
                 .rating(4)
                 .content("후기")
                 .build();
+        postRepository.save(post);
+        return post.getId();
     }
 }
