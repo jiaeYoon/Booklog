@@ -1,6 +1,5 @@
 package kr.org.booklog.domain.like.service;
 
-import kr.org.booklog.domain.like.dto.LikesSaveRequestDto;
 import kr.org.booklog.domain.like.entity.Likes;
 import kr.org.booklog.domain.like.repository.LikesRepository;
 import kr.org.booklog.domain.post.entity.Post;
@@ -20,23 +19,6 @@ public class LikesService {
     private final UserRepository userRepository;
     private final PostRepository postRepository;
 
-    public Long save(Long postId, LikesSaveRequestDto requestDto) {
-
-        Long userId = requestDto.getUserId();
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalStateException("해당 유저가 없습니다. id = " + userId));
-
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 감상평이 없습니다. id = " + postId));
-
-        requestDto.setUser(user);
-        requestDto.setPost(post);
-        
-        post.updateLikesCnt(post.getLikesCnt(), Boolean.TRUE);    // 게시글의 좋아요 수 업데이트(+1)
-
-        return likesRepository.save(requestDto.toEntity()).getId();
-    }
-
     public Long save(Long postId, Long userId) {
 
         User user = userRepository.findById(userId)
@@ -48,10 +30,9 @@ public class LikesService {
         Likes like = Likes.builder()
                 .user(user)
                 .post(post)
-                .isLike(Boolean.TRUE)
                 .build();
 
-        post.updateLikesCnt(post.getLikesCnt(), Boolean.TRUE);    // 게시글의 좋아요 수 업데이트(+1)
+        post.addLike();    // 게시글의 좋아요 수 업데이트(+1)
 
         return likesRepository.save(like).getId();
     }
@@ -63,7 +44,7 @@ public class LikesService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 감상평이 없습니다. id = " + postId));
 
-        post.updateLikesCnt(post.getLikesCnt(), Boolean.FALSE);    // 게시글의 좋아요 수 업데이트(-1)
+        post.deleteLike();    // 게시글의 좋아요 수 업데이트(-1)
 
         likesRepository.delete(entity);
     }

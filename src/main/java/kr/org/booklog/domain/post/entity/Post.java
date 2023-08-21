@@ -80,13 +80,12 @@ public class Post {
         this.commentsCnt = commentsCnt;
     }
 
-    public void updateLikesCnt(Integer likesCnt, Boolean plus) {
-        if (plus) {
-            this.likesCnt = likesCnt + 1;
-        }
-        else {
-            this.likesCnt = likesCnt - 1;
-        }
+    public void addLike() {
+        this.likesCnt += 1;
+    }
+
+    public void deleteLike() {
+        this.likesCnt -= 1;
     }
 
     public void updateCommentsCnt(Integer commentsCnt, Boolean plus) {

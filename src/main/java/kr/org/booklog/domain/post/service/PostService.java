@@ -38,7 +38,7 @@ public class PostService {
         List<PostTotalResponseDto> responseDto = new ArrayList<>();
         for (Post post : posts) {
             Likes like = likesRepository.isLike(userId, post.getId());
-            Boolean isLike = like != null && like.getIsLike();
+            Boolean isLike = like != null;
             responseDto.add(new PostTotalResponseDto(post, isLike));
         }
         return responseDto;
@@ -50,10 +50,10 @@ public class PostService {
         PostResponseDto responseDto = new PostResponseDto(post);
         
         // 게시글의 좋아요 여부 조회
-        Likes likes = likesRepository.findByUserIdAndPostId(userId, post.getId())
-                .orElse(new Likes(Boolean.FALSE));
-        responseDto.setLikeId(likes.getId());
-        responseDto.setIsLike(likes.getIsLike());
+        Likes like = likesRepository.isLike(userId, post.getId());
+        Boolean isLike = like != null;
+        post.setLikeId(like.getId());
+        post.setIsLike(isLike);
 
         return responseDto;
     }
