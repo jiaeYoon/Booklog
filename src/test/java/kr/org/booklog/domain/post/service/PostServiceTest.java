@@ -44,7 +44,7 @@ class PostServiceTest {
     void 게시글_저장() {
 
         //given
-        Long userId = newUsers(1);
+        Long userId = newUsers(1).get(0);
 
         PostRequestDto requestDto = PostRequestDto.builder()
                 .userId(userId)
@@ -53,7 +53,7 @@ class PostServiceTest {
                 .bookWriter("zzyoon")
                 .readStart(LocalDate.of(2023, 5, 14))
                 .readEnd(LocalDate.of(2023, 6, 14))
-                .postAt(LocalDate.of(2023, 6, 14))
+                .postAt(LocalDateTime.now())
                 .rating(4)
                 .content("후기")
                 .build();
@@ -78,7 +78,7 @@ class PostServiceTest {
         em.flush();
         em.clear();
 
-        likesService.save(postId1, userId1);
+        likesService.save(userId1, postId1);
 
         //when
         List<PostTotalResponseDto> posts = postService.findAll(userId1); // postAt 기준 내림차순 정렬
@@ -103,7 +103,7 @@ class PostServiceTest {
         em.flush();
         em.clear();
 
-        likesService.save(postId, userId1);
+        likesService.save(userId1, postId);
 
         //when
         PostResponseDto responseDto = postService.findById(postId, userId1);
@@ -115,11 +115,14 @@ class PostServiceTest {
     }
 
     @Test
-    void 게시글_수정() throws Exception {
+    void 게시글_수정() {
 
         //given
-        Long userId = newUsers(1);
-        Long postId = newPosts(userId, 1);
+        Long userId = newUsers(1).get(0);
+        Long postId = newPosts(userId, 1).get(0);
+
+        em.flush();
+        em.clear();
 
         //when
         PostRequestDto dto = PostRequestDto.builder()
@@ -128,19 +131,18 @@ class PostServiceTest {
                 .bookWriter("zzyoon")
                 .readStart(LocalDate.of(2023, 5, 14))
                 .readEnd(LocalDate.of(2023, 6, 14))
-                .postAt(LocalDate.of(2023, 6, 14))
+                .postAt(LocalDateTime.now())
                 .rating(1)
                 .content("후기100")
                 .build();
-        Long updatedId = postService.update(postId, dto);
-
-        em.flush();
-        em.clear();
+        postService.update(postId, dto);
 
         //then
-        assertThat(postRepository.findById(updatedId).get().getPostTitle()).isEqualTo("게시글 제목100");
-        assertThat(postRepository.findById(updatedId).get().getBookTitle()).isEqualTo("책 제목100");
-        assertThat(postRepository.findById(updatedId).get().getRating()).isEqualTo(1);
+        PostResponseDto responseDto = postRepository.findPostById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id = " + postId));
+        assertThat(responseDto.getPostTitle()).isEqualTo("게시글 제목100");
+        assertThat(responseDto.getBookTitle()).isEqualTo("책 제목100");
+        assertThat(responseDto.getRating()).isEqualTo(1);
     }
 
     @Test
