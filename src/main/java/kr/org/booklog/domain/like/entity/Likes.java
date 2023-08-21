@@ -1,6 +1,5 @@
 package kr.org.booklog.domain.like.entity;
 
-import com.sun.istack.NotNull;
 import kr.org.booklog.config.BaseTimeEntity;
 import kr.org.booklog.domain.post.entity.Post;
 import kr.org.booklog.domain.user.entity.User;
@@ -26,19 +25,14 @@ public class Likes extends BaseTimeEntity {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    @NotNull
-    private Boolean isLike;
-
     @Builder
-    public Likes(User user, Post post, Boolean isLike) {
+    public Likes(User user, Post post) {
         this.user = user;
         this.post = post;
-        this.isLike = isLike;
     }
 
     public Likes(Boolean isLike) {
         this.user = new User();
         this.post = new Post();
-        this.isLike = isLike;
     }
 }
