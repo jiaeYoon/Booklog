@@ -34,14 +34,27 @@ public class PostService {
     }
 
     public List<PostTotalResponseDto> findAll(Long userId) {
+
+        List<PostTotalResponseDto> dtos = new ArrayList<>();
+
         List<Post> posts = postRepository.findAllPosts();
-        List<PostTotalResponseDto> responseDto = new ArrayList<>();
+        List<Long> userLikePosts = findUserLikePosts(userId);
+
         for (Post post : posts) {
-            Likes like = likesRepository.isLike(userId, post.getId());
-            Boolean isLike = like != null;
-            responseDto.add(new PostTotalResponseDto(post, isLike));
+            Boolean isLike = userLikePosts.contains(post.getId()) ? Boolean.TRUE : Boolean.FALSE;
+            dtos.add(new PostTotalResponseDto(post, isLike));
         }
-        return responseDto;
+
+        return dtos;
+    }
+
+    private List<Long> findUserLikePosts(Long userId) {
+        List<Long> userLikePosts = new ArrayList<>();
+        List<Likes> userLikes = likesRepository.findByUserId(userId);
+        for (Likes userLike : userLikes) {
+            userLikePosts.add(userLike.getPost().getId());
+        }
+        return userLikePosts;
     }
 
     public PostResponseDto findById(Long id, Long userId) {
