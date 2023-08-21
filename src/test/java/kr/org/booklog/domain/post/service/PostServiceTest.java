@@ -1,5 +1,9 @@
 package kr.org.booklog.domain.post.service;
 
+import kr.org.booklog.domain.comment.dto.CommentRequestDto;
+import kr.org.booklog.domain.comment.repository.CommentRepository;
+import kr.org.booklog.domain.comment.service.CommentService;
+import kr.org.booklog.domain.like.repository.LikesRepository;
 import kr.org.booklog.domain.like.service.LikesService;
 import kr.org.booklog.domain.post.dto.PostRequestDto;
 import kr.org.booklog.domain.post.dto.PostResponseDto;
@@ -17,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -28,8 +34,11 @@ class PostServiceTest {
     @Autowired EntityManager em;
     @Autowired PostRepository postRepository;
     @Autowired UserRepository userRepository;
+    @Autowired LikesRepository likesRepository;
+    @Autowired CommentRepository commentRepository;
     @Autowired PostService postService;
     @Autowired LikesService likesService;
+    @Autowired CommentService commentService;
 
     @Test
     void 게시글_저장() {
@@ -123,20 +132,27 @@ class PostServiceTest {
     void 게시글_삭제() {
 
         //given
-        Long userId = newUsers(1);
-        Long postId = newPosts(userId, 2);
+        Long userId = newUsers(1).get(0);
+        Long postId = newPosts(userId, 2).get(0);
 
-        int repoSize = postRepository.findAll().size();
+        em.flush();
+        em.clear();
+
+        likesService.save(userId, postId);
+        commentService.save(new CommentRequestDto(userId, postId, "댓글1"));
+        commentService.save(new CommentRequestDto(userId, postId, "댓글2"));
 
         // when
         postService.delete(postId);
 
         //then
-        assertThat(postRepository.findAll().size()).isEqualTo(repoSize - 1);
+        assertThat(postRepository.findAll().size()).isEqualTo(1);
+        assertThat(likesRepository.findByPostId(postId).size()).isEqualTo(0);
+        assertThat(commentRepository.findByPostId(postId).size()).isEqualTo(0);
     }
 
-    private Long newUsers(int num) {
-        Long id = null;
+    private List<Long> newUsers(int num) {
+        List<Long> ids = new ArrayList<>();
         for (int i = 0; i < num; i++) {
             User user = User.builder()
                     .name("이름" + i)
@@ -144,15 +160,15 @@ class PostServiceTest {
                     .email("email" + i + "@gmail.com")
                     .role(Role.USER)
                     .build();
-            id = userRepository.save(user).getId();
+            ids.add(userRepository.save(user).getId());
         }
-        return id;
+        return ids;
     }
 
-    private Long newPosts(Long userId, int num) {
+    private List<Long> newPosts(Long userId, int num) {
         User user = userRepository.findById(userId).get();
 
-        Long id = null;
+        List<Long> ids = new ArrayList<>();
         for (int i = 0; i < num; i++) {
             Post post = Post.builder()
                     .user(user)
@@ -161,12 +177,12 @@ class PostServiceTest {
                     .bookWriter("zzyoon")
                     .readStart(LocalDate.of(2023, 5, 14))
                     .readEnd(LocalDate.of(2023, 6, 14))
-                    .postAt(LocalDate.of(2023, 6, 14))
+                    .postAt(LocalDateTime.now())
                     .rating(4)
                     .content("후기" + i)
                     .build();
-            id = postRepository.save(post).getId();
+            ids.add(postRepository.save(post).getId());
         }
-        return id;
+        return ids;
     }
 }
