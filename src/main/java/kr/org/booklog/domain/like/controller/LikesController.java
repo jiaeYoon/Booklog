@@ -1,17 +1,12 @@
 package kr.org.booklog.domain.like.controller;
 
-import kr.org.booklog.domain.like.dto.LikesSaveRequestDto;
 import kr.org.booklog.domain.like.service.LikesService;
-import kr.org.booklog.domain.user.entity.User;
-import kr.org.booklog.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
-//@RequestMapping("/api/v1")
-//@RestController
 @Controller
 @RequiredArgsConstructor
 public class LikesController {
