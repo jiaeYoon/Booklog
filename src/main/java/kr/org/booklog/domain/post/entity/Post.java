@@ -94,13 +94,14 @@ public class Post {
         this.likesCnt -= 1;
     }
 
-    public void updateCommentsCnt(Integer commentsCnt, Boolean plus) {
-        if (plus) {
-            this.commentsCnt = commentsCnt + 1;
-        }
-        else {
-            this.commentsCnt = commentsCnt - 1;
-        }
+    public void addComment(Comment comment) {
+        this.comments.add(comment);
+        this.commentsCnt += 1;
+    }
+
+    public void deleteComment(Comment comment) {
+        this.getComments().remove(comment);
+        this.commentsCnt = commentsCnt - 1;
     }
 
     public void updatePost(PostRequestDto requestDto) {

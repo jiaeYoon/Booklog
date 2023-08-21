@@ -37,9 +37,11 @@ public class CommentService {
                 .orElseThrow(() -> new NoSuchElementException("해당 감상평이 없습니다. id = " + postId));
         requestDto.setPost(post);
 
-        post.updateCommentsCnt(post.getCommentsCnt(), Boolean.TRUE);    // 게시글의 댓글 수 업데이트(+1)
+        Comment comment = commentRepository.save(requestDto.toEntity());
 
-        return commentRepository.save(requestDto.toEntity()).getId();
+        post.addComment(comment);    // 게시글의 댓글 목록, 수 업데이트(+1)
+
+        return comment.getId();
     }
 
     @Transactional(readOnly = true)
@@ -64,7 +66,7 @@ public class CommentService {
                 .orElseThrow(() -> new NoSuchElementException("해당 댓글이 없습니다. id = " + commentId));
 
         Post post = comment.getPost();
-        post.updateCommentsCnt(post.getCommentsCnt(), Boolean.FALSE);   // 게시글의 댓글 수 업데이트(-1)
+        post.deleteComment(comment);   // 게시글의 댓글 목록, 수 업데이트(-1)
 
         commentRepository.delete(comment);
     }
