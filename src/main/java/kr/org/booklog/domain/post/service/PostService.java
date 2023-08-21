@@ -58,7 +58,7 @@ public class PostService {
     }
 
     public PostResponseDto findById(Long id, Long userId) {
-        Post post = postRepository.findById(id)
+        PostResponseDto post = postRepository.findPostById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id = " + id));
         PostResponseDto responseDto = new PostResponseDto(post);
         
