@@ -1,8 +1,10 @@
 package kr.org.booklog.domain.post.service;
 
+import kr.org.booklog.domain.comment.dto.CommentResponseDto;
+import kr.org.booklog.domain.comment.entity.Comment;
+import kr.org.booklog.domain.comment.repository.CommentRepository;
 import kr.org.booklog.domain.like.entity.Likes;
 import kr.org.booklog.domain.like.repository.LikesRepository;
-import kr.org.booklog.domain.like.service.LikesService;
 import kr.org.booklog.domain.post.dto.PostRequestDto;
 import kr.org.booklog.domain.post.dto.PostResponseDto;
 import kr.org.booklog.domain.post.dto.PostTotalResponseDto;
@@ -24,6 +26,7 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final LikesRepository likesRepository;
+    private final CommentRepository commentRepository;
 
     @Transactional
     public Long save(PostRequestDto requestDto) {
@@ -67,6 +70,14 @@ public class PostService {
         Boolean isLike = like != null;
         post.setLikeId(likeId);
         post.setIsLike(isLike);
+
+        // 게시글의 댓글 조회
+        List<Comment> comments = commentRepository.findByPostId(id);
+        List<CommentResponseDto> dtos = new ArrayList<>();
+        for (Comment comment:comments) {
+            dtos.add(new CommentResponseDto(comment));
+        }
+        post.setComments(dtos);
 
         return post;
     }

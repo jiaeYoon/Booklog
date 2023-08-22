@@ -41,6 +41,5 @@ public class PostResponseDto {
         this.content = post.getContent();
         this.likesCnt = post.getLikesCnt();
         this.commentsCnt = post.getCommentsCnt();
-        this.comments = post.getComments();
     }
 }
