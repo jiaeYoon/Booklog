@@ -1,5 +1,6 @@
 package kr.org.booklog.domain.like.controller;
 
+import kr.org.booklog.domain.UserInfo;
 import kr.org.booklog.domain.like.service.LikesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -15,8 +16,10 @@ public class LikesController {
 
     @PostMapping("/posts/{id}/likes")
     public String save(@PathVariable Long id, HttpServletRequest request) {
-        Long userId = 1L;
+
+        Long userId = UserInfo.userId;
         likesService.save(userId, id);
+
         String referer = request.getHeader("Referer");
         return "redirect:"+ referer;
     }

@@ -1,5 +1,6 @@
 package kr.org.booklog.domain.post.controller;
 
+import kr.org.booklog.domain.UserInfo;
 import kr.org.booklog.domain.comment.dto.CommentResponseDto;
 import kr.org.booklog.domain.comment.service.CommentService;
 import kr.org.booklog.domain.post.dto.PostRequestDto;
@@ -75,7 +76,7 @@ public class PostController {
             return "post-save";
         }
 
-        Long userId = 1L;
+        Long userId = UserInfo.userId;
         PostRequestDto dto = PostRequestDto.builder()
                 .userId(userId)
                 .postTitle(form.getPostTitle())
@@ -94,7 +95,9 @@ public class PostController {
 
     @GetMapping("/home")
     public String findAll(Model model) {
-        User user = userRepository.findById(1L).get();
+
+        Long userId = UserInfo.userId;
+        User user = userRepository.findById(userId).get();
         List<PostTotalResponseDto> posts = postService.findAll(user.getId());
         model.addAttribute("user", user);
         model.addAttribute("posts", posts);
@@ -105,11 +108,10 @@ public class PostController {
     @GetMapping("/posts/{id}")
     public String findById(@PathVariable Long id, Model model) {
 
-        Long userId = 1L;
+        Long userId = UserInfo.userId;
         PostResponseDto post = postService.findById(id, userId);
-        List<CommentResponseDto> commenets = commentService.findAll(id);
+        model.addAttribute("userId", userId);
         model.addAttribute("post_", post);
-        model.addAttribute("comments", commenets);
         model.addAttribute("commentForm", new CommentResponseDto());
         return "post-update";
     }

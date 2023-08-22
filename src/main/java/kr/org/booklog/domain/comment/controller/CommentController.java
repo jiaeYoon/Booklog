@@ -1,7 +1,6 @@
 package kr.org.booklog.domain.comment.controller;
 
 import kr.org.booklog.domain.comment.dto.CommentRequestDto;
-import kr.org.booklog.domain.comment.dto.CommentResponseDto;
 import kr.org.booklog.domain.comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -9,10 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
-//@RestController
-//@RequestMapping("/api/v1")
 @Controller
 @RequiredArgsConstructor
 public class CommentController {
@@ -27,7 +23,6 @@ public class CommentController {
             return "redirect:"+ referer;
         }
 
-        requestDto.setUserId(1L);
         commentService.save(requestDto);
         return "redirect:"+ referer;
     }
