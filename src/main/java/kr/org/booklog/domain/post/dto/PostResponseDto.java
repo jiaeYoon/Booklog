@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Getter
@@ -19,7 +19,7 @@ public class PostResponseDto {
     private String bookWriter;
     private LocalDate readStart;
     private LocalDate readEnd;
-    private LocalDateTime postAt;
+    private String postAt;
     private Integer rating;
     private String content;
     private Long likeId;
@@ -36,7 +36,7 @@ public class PostResponseDto {
         this.bookWriter = post.getBookWriter();
         this.readStart = post.getReadStart();
         this.readEnd = post.getReadEnd();
-        this.postAt = post.getPostAt();
+        this.postAt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(post.getPostAt());
         this.rating = post.getRating();
         this.content = post.getContent();
         this.likesCnt = post.getLikesCnt();

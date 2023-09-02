@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
@@ -15,7 +15,7 @@ public class PostTotalResponseDto {
     private String nickname;
     private String postTitle;
     private String bookTitle;
-    private LocalDateTime postAt;
+    private String postAt;
     private Integer rating;
     private String content;
     private Boolean isLike;
@@ -27,7 +27,7 @@ public class PostTotalResponseDto {
         this.nickname = post.getUser().getNickname();
         this.postTitle = post.getPostTitle();
         this.bookTitle = post.getBookTitle();
-        this.postAt = post.getPostAt();
+        this.postAt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(post.getPostAt());
         this.rating = post.getRating();
         this.content = post.getContent();
         this.isLike = isLike;
