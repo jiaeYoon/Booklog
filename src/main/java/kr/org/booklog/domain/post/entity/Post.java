@@ -56,7 +56,7 @@ public class Post {
     @NotNull
     private LocalDate readEnd;
 
-    @NotNull
+    @Column(updatable = false)
     private LocalDateTime postAt;
 
     @NotNull
