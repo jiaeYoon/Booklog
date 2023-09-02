@@ -113,10 +113,21 @@ public class PostController {
         model.addAttribute("userId", userId);
         model.addAttribute("post_", post);
         model.addAttribute("commentForm", new CommentResponseDto());
+        return "post-detail";
+    }
+
+    @GetMapping("/posts/update/{id}")
+    public String getUpdatePost(@PathVariable Long id, Model model) {
+
+        Long userId = UserInfo.userId;
+        PostResponseDto post = postService.findById(id, userId);
+//        model.addAttribute("userId", userId);
+        model.addAttribute("post_", post);
         return "post-update";
     }
 
-    @PutMapping("posts/{id}")
+
+    @PutMapping("posts/update/{id}")
     public String updatePost(@PathVariable Long id, PostForm form, BindingResult result) {
 
         if (result.hasErrors()) {
