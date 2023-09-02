@@ -10,19 +10,19 @@
     <form method="post" th:action="@{/posts/save}" th:object="${postForm}">
         <div class="post-form">
             <label th:for="postTitle">게시글 제목 : </label>
-            <input placeholder="게시글 제목을 입력하세요" th:field="*{postTitle}" type="text"/>
+            <input placeholder="게시글 제목을 입력하세요" th:field="*{postTitle}" type="text"/><br/>
             <label th:for="bookTitle">책 제목 : </label>
-            <input placeholder="책 제목을 입력하세요" th:field="*{bookTitle}" type="text"/>
+            <input placeholder="책 제목을 입력하세요" th:field="*{bookTitle}" type="text"/><br/>
             <label th:for="bookWriter">작가 : </label>
-            <input placeholder="작가를 입력하세요" th:field="*{bookWriter}" type="text"/>
+            <input placeholder="작가를 입력하세요" th:field="*{bookWriter}" type="text"/><br/>
             <label th:for="readStart">읽기 시작한 날 : </label>
-            <input th:field="*{readStart}" type="date"/>
+            <input th:field="*{readStart}" type="date"/><br/>
             <label th:for="readEnd">다 읽은 날 : </label>
-            <input th:field="*{readEnd}" type="date"/>
+            <input th:field="*{readEnd}" type="date"/><br/>
             <label th:for="rating">평점 : </label>
-            <input placeholder="평점을 입력하세요" th:field="*{rating}" type="text"/>
+            <input placeholder="평점을 입력하세요" th:field="*{rating}" type="text"/><br/>
             <label th:for="content">후기 : </label>
-            <input placeholder="후기를 입력하세요" th:field="*{content}" type="text"/>
+            <input placeholder="후기를 입력하세요" th:field="*{content}" type="text"/><br/>
         </div>
         <button type="submit">저장하기</button>
     </form>

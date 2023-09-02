@@ -10,22 +10,20 @@
     <form method="post" th:action th:object="${postForm}">
         <input name="_method" type="hidden" value="put"/>
         <label th:for="postTitle">게시글 제목 : </label>
-        <input id="postTitle" name="postTitle" placeholder="게시글 제목을 입력하세요" th:value="${post_.postTitle}" type="text"/>
+        <input id="postTitle" name="postTitle" placeholder="게시글 제목을 입력하세요" th:value="${post_.postTitle}" type="text"/><br/>
         <label th:for="bookTitle">책 제목 : </label>
-        <input id="bookTitle" name="bookTitle" placeholder="책 제목을 입력하세요" th:value="${post_.bookTitle}" type="text"/>
+        <input id="bookTitle" name="bookTitle" placeholder="책 제목을 입력하세요" th:value="${post_.bookTitle}" type="text"/><br/>
         <label th:for="bookWriter">작가 : </label>
-        <input id="bookWriter" name="bookWriter" placeholder="작가를 입력하세요" th:value="${post_.bookWriter}" type="text"/>
+        <input id="bookWriter" name="bookWriter" placeholder="작가를 입력하세요" th:value="${post_.bookWriter}" type="text"/><br/>
         <label th:for="readStart">읽기 시작한 날 : </label>
-        <input id="readStart" name="readStart" th:value="${post_.readStart}" type="date"/>
+        <input id="readStart" name="readStart" th:value="${post_.readStart}" type="date"/><br/>
         <label th:for="readEnd">다 읽은 날 : </label>
-        <input id="readEnd" name="readEnd" th:value="${post_.readEnd}" type="date"/>
+        <input id="readEnd" name="readEnd" th:value="${post_.readEnd}" type="date"/><br/>
         <label th:for="rating">평점 : </label>
-        <input id="rating" name="rating" placeholder="평점을 입력하세요" th:value="${post_.rating}" type="text"/>
+        <input id="rating" name="rating" placeholder="평점을 입력하세요" th:value="${post_.rating}" type="text"/><br/>
         <label th:for="content">후기 : </label>
-        <input id="content" name="content" placeholder="후기를 입력하세요" th:value="${post_.content}" type="text"/>
-        <input id="postAt" name="postAt" th:value="${post_.postAt}" type="hidden">
+        <input id="content" name="content" placeholder="후기를 입력하세요" th:value="${post_.content}" type="text"/><br/>
         <button type="submit">저장하기</button>
-        <button th:onclick="|location.href='@{/home}'|" type="button">목록보기</button>
     </form>
 </body>
 </html>
