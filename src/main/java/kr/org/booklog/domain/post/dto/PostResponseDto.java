@@ -1,6 +1,6 @@
 package kr.org.booklog.domain.post.dto;
 
-import kr.org.booklog.domain.comment.entity.Comment;
+import kr.org.booklog.domain.comment.dto.CommentResponseDto;
 import kr.org.booklog.domain.post.entity.Post;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +13,7 @@ import java.util.List;
 @Setter
 public class PostResponseDto {
     private Long id;
+    private Long postWriterId;
     private String nickname;
     private String postTitle;
     private String bookTitle;
@@ -26,10 +27,11 @@ public class PostResponseDto {
     private Boolean isLike;
     private Integer likesCnt;
     private Integer commentsCnt;
-    private List<Comment> comments;
+    private List<CommentResponseDto> comments;
 
     public PostResponseDto(Post post) {
         this.id = post.getId();
+        this.postWriterId = post.getUser().getId();
         this.nickname = post.getUser().getNickname();
         this.postTitle = post.getPostTitle();
         this.bookTitle = post.getBookTitle();
