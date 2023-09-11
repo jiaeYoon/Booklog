@@ -27,7 +27,7 @@ public class PostTotalResponseDto {
         this.nickname = post.getUser().getNickname();
         this.postTitle = post.getPostTitle();
         this.bookTitle = post.getBookTitle();
-        this.postAt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(post.getPostAt());
+        this.postAt = DateTimeFormatter.ofPattern("yyyy.MM.dd").format(post.getPostAt());
         this.rating = post.getRating();
         this.content = post.getContent();
         this.isLike = isLike;
