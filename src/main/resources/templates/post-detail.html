@@ -3,58 +3,113 @@
 <head>
     <meta charset="UTF-8">
     <title>Post</title>
+    <link href="/css/style.css" rel="stylesheet" type="text/css">
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" rel="stylesheet">
 </head>
 <body>
-<h1>Booklog</h1>
-<h3>글 개별 조회</h3>
-    <div>
-        <div th:for="postTitle">게시글 제목 : <span th:text="${post_.postTitle}"></span></div>
-        <div th:for="postAt">작성일 : <span th:text="${post_.postAt}"></span></div>
-        <div th:for="bookTitle">책 제목 : <span th:text="${post_.bookTitle}"></span></div>
-        <div th:for="bookWriter">작가 : <span th:text="${post_.bookWriter}"></span></div>
-        <div th:for="readStart">읽기 시작한 날 : <span th:text="${post_.readStart}"></span></div>
-        <div th:for="readEnd">다 읽은 날 : <span th:text="${post_.readEnd}"></span></div>
-        <div th:for="rating">평점 : <span th:text="${post_.rating}"></span></div>
-        <div th:for="content">후기 : <span th:text="${post_.content}"></span></div>
-    </div>
-    <button th:if="${userId == post_.postWriterId}" th:onclick="|location.href='@{/posts/update/{id}(id=${post_.id})}'|" type="button">수정하기</button>
-    <button th:onclick="|location.href='@{/home}'|" type="button">목록보기</button>
-
-    <table>
-        <tr>
-            <td href="#" th:if="${post_.isLike == true}" th:onclick="|javascript:cancel(${post_.id}, ${post_.likeId})|">♥</td>
-            <td href="#" th:onclick="|javascript:like(${post_.id})|" th:unless="${post_.isLike == true}">♡</td>
-            <td th:text="${post_.likesCnt}" type="text"></td>
-            <td th:text="|💬 ${post_.commentsCnt}|" type="text"></td>
-        </tr>
-    </table>
-    <hr/>
-    <table border="1" th:if="${!#lists.isEmpty(post_.comments)}">
-        <thead>
-        <tr>
-            <th>#</th>
-            <th>닉네임</th>
-            <th>댓글</th>
-            <th>댓글 단 시간</th>
-            <th>메뉴</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="comment : ${post_.comments}">
-            <td th:text="${comment.id}"></td>
-            <td th:text="${comment.nickname}"></td>
-            <td th:text="${comment.content}"></td>
-            <td th:text="${comment.commentAt}"></td>
-            <td th:if="${userId == comment.userId}" th:onclick="|javascript:deleteComment(${comment.id})|" type="button">삭제</td>
-        </tr>
-        </tbody>
-    </table>
-    <form method="post" th:action="@{/comments}" th:object="${commentForm}">
-        <input th:field="*{content}" type="text">
-        <input id="postId" name="postId" th:value="${post_.id}" type="hidden">
-        <input id="userId" name="userId" th:value="${userId}" type="hidden">
-        <button type="submit">댓글달기</button>
-    </form>
+    <script crossorigin="anonymous" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <nav class="navbar navbar-light shadow-sm" style="margin: 0 auto;">
+        <svg class="bi bi-chevron-left" fill="currentColor" height="28" style="cursor: pointer;" th:onclick="|location.href='@{/home}'|" viewBox="0 0 16 16"
+             width="28"
+             xmlns="http://www.w3.org/2000/svg">
+            <path d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z" fill-rule="evenodd"></path>
+        </svg>
+    </nav>
+    <main class="post-detail-main flex-wrap align-items-stretch" style="height:94vh;">
+        <div>
+            <div class="post d-flex ">
+                <div class="flex-shrink-0"><img alt="..." class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg"></div>
+                <div class="ms-3 flex-fill">
+                    <div class="fw-bold" th:text="${post_.nickname}"></div>
+                    <small class="text-muted" th:text="${post_.postAt}"> 작성</small>
+                </div>
+                <span class="dropdown">
+                    <button aria-expanded="false" class="btn btn-transparent" data-bs-toggle="dropdown" style="padding:0" type="button">
+                        <svg class="bi bi-three-dots-vertical" fill="currentColor" height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                        </svg>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item"
+                               th:if="${userId == post_.postWriterId}"
+                               th:onclick="|location.href='@{/posts/update/{id}(id=${post_.id})}'|" >수정</a>
+                        </li>
+                        <li><a class="dropdown-item" href="#" th:if="${userId != post_.postWriterId}">신고하기</a></li>
+                    </ul>
+                </span>
+            </div>
+            <div class="fw-bold fs-4 post-title" th:text="${post_.postTitle}"></div>
+            <div th:for="rating">평점 : <span th:text="|${post_.rating}/5|"></span></div>
+            <div th:text="${post_.content}"></div>
+            <div class="d-flex book-info">
+                <div class="flex-shrink-0"><img alt="..." class="book-image" src="https://dummyimage.com/50X70/ced4da/6c757d.jpg"></div>
+                <div class="ms-2 mt-1">
+                    <a class="book-title fw-bold" th:onclick="searchBook([[${post_.bookTitle}]])" th:text="${post_.bookTitle}"></a>
+                    <div th:text="|저자 : ${post_.bookWriter}|"></div>
+                </div>
+            </div>
+            </div>
+            <table class="reactions">
+                <tr>
+                    <td href="#" th:if="${post_.isLike == true}" th:onclick="|javascript:cancel(${post_.id}, ${post_.likeId})|">
+                        <svg class="bi bi-heart-fill" fill="currentColor" height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z" fill-rule="evenodd"/>
+                        </svg>
+                    </td>
+                    <td href="#" th:onclick="|javascript:like(${post_.id})|" th:unless="${post_.isLike == true}">
+                        <svg class="bi bi-heart" fill="currentColor" height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
+                            <path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+                        </svg>
+                    </td>
+                    <td th:text="${post_.likesCnt}" type="text"></td>
+                    <td>
+                        <svg class="bi bi-chat-left" fill="currentColor" height="18" viewBox="0 0 16 16" width="18" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M14 1a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H4.414A2 2 0 0 0 3 11.586l-2 2V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12.793a.5.5 0 0 0 .854.353l2.853-2.853A1 1 0 0 1 4.414 12H14a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z"/>
+                        </svg>
+                        <span th:text="${post_.commentsCnt}" type="text"></span>
+                    </td>
+                </tr>
+            </table>
+            <hr/>
+            <!-- Comment form-->
+            <form class="mb-3 d-flex " method="post" th:action="@{/comments}" th:object="${commentForm}">
+                <textarea class="form-control" placeholder="Join the discussion and leave a comment!" rows="1" th:field="*{content}"></textarea>
+                <!--            <input th:field="*{content}" type="text">-->
+                <input id="postId" name="postId" th:value="${post_.id}" type="hidden">
+                <input id="userId" name="userId" th:value="${userId}" type="hidden">
+                <button class="btn btn-primary" style="margin-left: 5px;" type="submit">
+                    <svg class="bi bi-send" fill="currentColor" height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z"/>
+                    </svg>
+                </button>
+            </form>
+            <!-- Comment-->
+            <div class="comment" th:each="comment : ${post_.comments}" th:if="${!#lists.isEmpty(post_.comments)}">
+                <div class="d-flex">
+                    <div class="flex-shrink-0"><img alt="..." class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg"></div>
+                    <div class="ms-3 flex-fill">
+                        <span class="fw-bold" th:text="${comment.nickname}"></span>
+                        <small class="text-muted flex-fill" th:text="${comment.commentAt}"></small>
+                        <div th:text="${comment.content}"></div>
+                    </div>
+                    <span class="dropdown">
+                        <button aria-expanded="false" class="btn btn-transparent" data-bs-toggle="dropdown" style="padding:0" type="button">
+                            <svg class="bi bi-three-dots-vertical" fill="currentColor" height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+                            </svg>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#"
+                                   th:if="${userId == comment.userId}"
+                                   th:onclick="|javascript:deleteComment(${comment.id})|">삭제</a></li>
+                            <li><a class="dropdown-item" href="#"
+                                   th:if="${userId != comment.userId}"
+                                   th:onclick="|javascript:reportComment(${comment.id})|">신고하기</a></li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+    </main>
 </body>
 </html>
 <script>
@@ -114,5 +169,13 @@
         document.body.appendChild(form);
 
         form.submit();
+    }
+
+    function searchBook(book_title) {
+        var url = "https://www.google.com/search?tbm=bks&q=" + book_title;
+        var exec = document.createElement("a");
+        exec.setAttribute("href", url);
+        exec.setAttribute("target", "_blank");
+        exec.click();
     }
 </script>

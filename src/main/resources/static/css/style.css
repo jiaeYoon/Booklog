@@ -1,0 +1,157 @@
+.app-title {
+    color: MediumSeaGreen;
+    margin-left: 1vw;
+    padding-bottom : 4px;
+}
+
+main {
+    background: white;
+    padding-top: 5vh;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50vw;
+    font-family: 'AppleSDGothicNeo', 'Noto Sans KR', sans-serif;
+}
+
+.navbar {
+    background: white;
+}
+
+body {
+    background-color: #f1f3f5 !important;
+}
+
+.home_posts {
+    border : 1px solid;
+    border-collapse: collapse;
+    width: 80%;
+    margin : 5px;
+}
+th, td {
+  border: 1px solid #444444;
+}
+
+.posting-btn {
+    position: fixed;
+    right: 50px;
+    bottom: 50px;
+}
+
+.post-link {
+    cursor : pointer;
+}
+
+.book-title {
+    cursor : pointer;
+    color: #033e95;
+}
+
+.comment-info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn btn-transparent {
+    padding : 0;
+}
+
+.comment-info-right {
+    margin-left: auto;
+}
+
+.mb-4 {
+    display: flex;
+}
+
+.bi bi-chevron-left {
+    padding: 3px;
+}
+
+.navbar {
+    margin-bottom: 5px;
+}
+
+.text-muted {
+    font-size: small;
+}
+
+.post {
+    margin : 20px 0px 10px 0px;
+}
+
+.post-title {
+    margin-top : 10px;
+}
+
+.book-info {
+    margin-top : 10px;
+    background-color : #f1f3f5;
+}
+
+.bi-chat-left {
+    margin-left : 5px;
+}
+
+.reactions {
+    margin : 10px 0px 10px 0px;
+}
+
+ul {
+  list-style-type: none;
+  padding-right : 32px;
+}
+
+.border-black-30 {
+    margin: 6px 0px 6px 0px;
+}
+
+.main-nickname {
+    font-size: small;
+    margin-bottom: 5px;
+}
+
+.main-title {
+    margin-top : 3px;
+    margin-bottom: 0px;
+}
+
+.main-content {
+    margin-top : 3px;
+    font-size: small;
+}
+
+.main-reactions {
+    margin-top : 3px;
+}
+
+.main-reactions {
+    font-size: small;
+}
+
+.main-postAt {
+    font-size: 9pt;
+    margin-left : 3px;
+}
+
+.post-detail-main {
+    padding: 0px 20px 5px 20px;
+    padding-top: 5vh;
+}
+
+.comments {
+    background: white;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50vw;
+    font-family: 'AppleSDGothicNeo', 'Noto Sans KR', sans-serif;
+}
+
+.comment {
+    padding : 0px 20px 15px 20px;
+    margin : 0px -20px 0px -20px;
+    background: white;
+}
+
+.book-title{
+    margin-top: 10px;
+}
