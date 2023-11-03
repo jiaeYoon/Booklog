@@ -93,18 +93,6 @@ public class PostController {
         return "redirect:/";
     }
 
-    @GetMapping("/home")
-    public String findAll(Model model) {
-
-        Long userId = UserInfo.userId;
-        User user = userRepository.findById(userId).get();
-        List<PostTotalResponseDto> posts = postService.findAll(user.getId());
-        model.addAttribute("user", user);
-        model.addAttribute("posts", posts);
-        return "home";
-
-    }
-
     @GetMapping("/posts/{id}")
     public String findById(@PathVariable Long id, Model model) {
 
