@@ -13,6 +13,23 @@
         <span class="fs-4 fw-bold app-title">Booklog</span>
     </nav>
     <main class="w-[100%] px-[1.6rem] pt-[11.9rem]">
+        <div id="setNickname" th:value="${setNickname}"></div>
+        <div aria-hidden="true" aria-labelledby="exampleModalLabel" class="modal fade" id="SetNicknameModal" tabindex="-1" th:if="${setNickname}">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <form method="post" th:action="|@{/users/update}|" th:object="${nicknameForm}">
+                            <input name="_method" type="hidden" value="put"/>
+                            <div class="mb-3">
+                                <label class="col-form-label" th:for="nickname">Booklog에서 사용할 닉네임을 설정해주세요!</label>
+                                <input class="form-control" th:field="*{nickname}" type="text">
+                            </div>
+                            <button class="btn btn-primary" type="submit">확인</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 <!--    <div th:text="|id : ${user.id}|"></div>-->
 <!--    <div th:text="|nickname : ${user.nickname}|"></div>-->
         <svg class="bi bi-plus-circle-fill posting-btn post-link" fill="MediumSeaGreen" height="50" th:onclick="|location.href='@{/posts/save}'|" viewBox="0 0 16 16" width="50" xmlns="http://www.w3.org/2000/svg">
@@ -55,3 +72,15 @@
     </main>
 </body>
 </html>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script>
+    window.addEventListener('DOMContentLoaded', function() {
+        var setNickname = '[[${setNickname}]]';
+        console.log(setNickname);
+        if (setNickname == "true") {
+            $('#SetNicknameModal').modal({backdrop:'static', keyboard:false});
+            $("#SetNicknameModal").modal("show");
+        }
+    });
+
+</script>
