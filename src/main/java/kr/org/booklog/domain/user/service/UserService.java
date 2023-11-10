@@ -28,7 +28,7 @@ public class UserService {
         user.addInfo(nickname);
     }
 
-    public void reloadSessionUserInfo(String user, SessionUser sessionUser) {
+    public void reloadSessionUserInfo(SessionUser sessionUser) {
         httpSession.removeAttribute("user");
         httpSession.setAttribute("user", sessionUser);
     }

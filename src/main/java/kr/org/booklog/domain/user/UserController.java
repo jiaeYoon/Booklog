@@ -29,7 +29,7 @@ public class UserController {
         userService.updateUserInfo(sessionUser.getId(), nickname);
         sessionUser.updateNickname(nickname);
 
-        userService.reloadSessionUserInfo("user", sessionUser);
+        userService.reloadSessionUserInfo(sessionUser);
 
         return new RedirectView("/home");
     }
