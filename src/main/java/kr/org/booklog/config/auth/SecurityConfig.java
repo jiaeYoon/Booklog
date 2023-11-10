@@ -1,6 +1,5 @@
 package kr.org.booklog.config.auth;
 
-import kr.org.booklog.domain.user.entity.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,10 +19,11 @@ public class SecurityConfig {
                 .headers().frameOptions().disable()
                 .and()
                     .authorizeRequests()
-                    .antMatchers("/", "/css/**", "/images/**", "/js/**", "/h2-console/**").permitAll()
-                    .antMatchers("/api/v1/**").permitAll() //.hasRole(Role.USER.name())
-                    .antMatchers("/**").permitAll()
-                    .antMatchers("/h2-console/**").permitAll()
+                    .antMatchers("/", "/css/**", "/images/**", "/js/**").permitAll()
+                    .antMatchers("/posts/save").hasRole("USER")
+                    .antMatchers("/h2-console/**").hasRole("ADMIN")
+                    .antMatchers("/home", "/posts/{id}").permitAll()
+                    .antMatchers("/**").hasRole("USER")
                     .anyRequest().authenticated()
                 .and()
                     .logout()
