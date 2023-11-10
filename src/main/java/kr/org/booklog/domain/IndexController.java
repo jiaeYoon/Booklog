@@ -41,9 +41,6 @@ public class IndexController {
             model.addAttribute("user", user);
             model.addAttribute("setNickname", setNickname);
             model.addAttribute("nicknameForm", new SetNicknameForm());
-        } else {
-            Long guest_id = 164L;
-            posts = postService.findAll(guest_id);
         }
 
         model.addAttribute("posts", posts);
