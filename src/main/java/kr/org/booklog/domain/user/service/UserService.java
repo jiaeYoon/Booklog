@@ -17,6 +17,11 @@ public class UserService {
     private final UserRepository userRepository;
     private final HttpSession httpSession;
 
+    public User findById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 id값을 가지는 사용자가 없습니다."));
+    }
+
     public void updateUserInfo(Long userId, String nickname) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 id값을 가지는 사용자가 없습니다."));
@@ -26,5 +31,12 @@ public class UserService {
     public void reloadSessionUserInfo(String user, SessionUser sessionUser) {
         httpSession.removeAttribute("user");
         httpSession.setAttribute("user", sessionUser);
+    }
+
+    public Long setGuestSession() {
+        Long guestId = 164L;
+        SessionUser sessionUser = new SessionUser(findById(guestId));
+        httpSession.setAttribute("user", sessionUser);
+        return guestId;
     }
 }
