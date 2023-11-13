@@ -1,4 +1,4 @@
-package kr.org.booklog.domain.user;
+package kr.org.booklog.domain.user.controller;
 
 import kr.org.booklog.config.auth.LoginUser;
 import kr.org.booklog.config.auth.dto.SessionUser;
