@@ -1,12 +1,12 @@
 package kr.org.booklog.domain.user.entity;
 
-import com.sun.istack.NotNull;
 import kr.org.booklog.config.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @NoArgsConstructor

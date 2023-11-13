@@ -1,6 +1,5 @@
 package kr.org.booklog.domain.post.entity;
 
-import com.sun.istack.NotNull;
 import kr.org.booklog.domain.comment.entity.Comment;
 import kr.org.booklog.domain.like.entity.Likes;
 import kr.org.booklog.domain.post.dto.PostRequestDto;
@@ -12,6 +11,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -67,11 +67,9 @@ public class Post {
     @Column(columnDefinition = "text")
     private String content;
 
-    @NotNull
     @ColumnDefault("0")
     private Integer likesCnt;
 
-    @NotNull
     @ColumnDefault("0")
     private Integer commentsCnt;
 

@@ -1,6 +1,5 @@
 package kr.org.booklog.domain.comment.entity;
 
-import com.sun.istack.NotNull;
 import kr.org.booklog.config.BaseTimeEntity;
 import kr.org.booklog.domain.comment.dto.CommentRequestDto;
 import kr.org.booklog.domain.post.entity.Post;
@@ -10,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter
