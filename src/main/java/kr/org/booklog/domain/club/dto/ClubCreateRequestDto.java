@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 public class ClubCreateRequestDto {
 
-    private User user;
+    private User leader;
     private String clubName;
     private int capacity;
     private String introduction;
@@ -24,7 +24,7 @@ public class ClubCreateRequestDto {
 
     public Club toEntity() {
         return Club.builder()
-                .user(user)
+                .leader(leader)
                 .clubName(clubName)
                 .capacity(capacity)
                 .introduction(introduction)

@@ -20,8 +20,8 @@ public class Club {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "leader_id")
+    private User leader;
 
     @NotNull
     private String clubName;
@@ -33,8 +33,8 @@ public class Club {
     private String introduction;
 
     @Builder
-    public Club(User user, String clubName, int capacity, String introduction) {
-        this.user = user;
+    public Club(User leader, String clubName, int capacity, String introduction) {
+        this.leader = leader;
         this.clubName = clubName;
         this.capacity = capacity;
         this.introduction = introduction;

@@ -46,7 +46,7 @@ class BookClubServiceTest {
         Club bookClub = clubRepository.findById(id).get();
         assertThat(bookClub.getClubName()).isEqualTo("추리 소설 클럽");
         assertThat(bookClub.getCapacity()).isEqualTo(4);
-        assertThat(bookClub.getUser().getNickname()).isEqualTo(sessionUser.getNickname());
+        assertThat(bookClub.getLeader().getNickname()).isEqualTo(sessionUser.getNickname());
     }
 
     private SessionUser newSessionUser() {

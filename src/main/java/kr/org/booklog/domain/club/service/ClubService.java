@@ -19,14 +19,14 @@ public class ClubService {
 
     @Transactional
     public Long save(SessionUser sessionUser, ClubCreateRequestDto requestDto) {
-        setHost(sessionUser, requestDto);
+        User user = findUser(sessionUser);
+        requestDto.setLeader(user);
         return clubRepository.save(requestDto.toEntity()).getId();
     }
 
-    private void setHost(SessionUser sessionUser, BookClubCreateRequestDto requestDto) {
+    private User findUser(SessionUser sessionUser) {
         Long userId = sessionUser.getId();
-        User user = userRepository.findById(userId)
+        return userRepository.findById(userId)
                 .orElseThrow(IllegalArgumentException::new);
-        requestDto.setUser(user);
     }
 }
