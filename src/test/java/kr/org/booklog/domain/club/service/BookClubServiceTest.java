@@ -9,15 +9,15 @@ import kr.org.booklog.domain.memberRegister.MemberRegisterRepository;
 import kr.org.booklog.domain.user.entity.Role;
 import kr.org.booklog.domain.user.entity.User;
 import kr.org.booklog.domain.user.repository.UserRepository;
+import kr.org.booklog.exception.NotEnoughCapacityException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @Transactional
@@ -59,7 +59,7 @@ class BookClubServiceTest {
         User leader = newUser("A");
         User member = newUser("B");
 
-        Long clubId = newClub(leader).getId();
+        Long clubId = newClub(leader, 4).getId();
 
         //when
         Long bookClubMemberId = clubService.join(new SessionUser(member), clubId);
@@ -74,11 +74,27 @@ class BookClubServiceTest {
         assertThat(memberRegister.getUser().getName()).isEqualTo("B");
     }
 
-    private Club newClub(User leader) {
+    @Test
+    @DisplayName("모임 정원 초과")
+    void overcapacity() {
+
+        //given
+        User leader = newUser("A");
+        User member1 = newUser("B");
+        User member2 = newUser("C");
+        Long clubId = newClub(leader, 2).getId();
+
+        //when, then
+        clubService.join(new SessionUser(member1), clubId);
+        assertThatThrownBy(() -> clubService.join(new SessionUser(member2), clubId))
+                .isInstanceOf(NotEnoughCapacityException.class);
+    }
+
+    private Club newClub(User leader, int capacity) {
         Club club = Club.builder()
                 .leader(leader)
                 .clubName("추리 소설 클럽")
-                .capacity(4)
+                .capacity(capacity)
                 .introduction("소개글")
                 .build();
         return clubRepository.save(club);
