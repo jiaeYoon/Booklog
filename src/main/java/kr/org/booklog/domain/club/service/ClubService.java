@@ -1,8 +1,8 @@
-package kr.org.booklog.domain.bookClub.service;
+package kr.org.booklog.domain.club.service;
 
 import kr.org.booklog.config.auth.dto.SessionUser;
-import kr.org.booklog.domain.bookClub.dto.BookClubCreateRequestDto;
-import kr.org.booklog.domain.bookClub.repository.BookClubRepository;
+import kr.org.booklog.domain.club.dto.ClubCreateRequestDto;
+import kr.org.booklog.domain.club.repository.ClubRepository;
 import kr.org.booklog.domain.user.entity.User;
 import kr.org.booklog.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,15 +12,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class BookClubService {
+public class ClubService {
 
     private final UserRepository userRepository;
-    private final BookClubRepository bookClubRepository;
+    private final ClubRepository clubRepository;
 
     @Transactional
-    public Long save(SessionUser sessionUser, BookClubCreateRequestDto requestDto) {
+    public Long save(SessionUser sessionUser, ClubCreateRequestDto requestDto) {
         setHost(sessionUser, requestDto);
-        return bookClubRepository.save(requestDto.toEntity()).getId();
+        return clubRepository.save(requestDto.toEntity()).getId();
     }
 
     private void setHost(SessionUser sessionUser, BookClubCreateRequestDto requestDto) {

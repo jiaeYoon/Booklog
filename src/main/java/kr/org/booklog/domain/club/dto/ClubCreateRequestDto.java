@@ -1,6 +1,6 @@
-package kr.org.booklog.domain.bookClub.dto;
+package kr.org.booklog.domain.club.dto;
 
-import kr.org.booklog.domain.bookClub.entity.BookClub;
+import kr.org.booklog.domain.club.entity.Club;
 import kr.org.booklog.domain.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class BookClubCreateRequestDto {
+public class ClubCreateRequestDto {
 
     private User user;
     private String clubName;
@@ -16,14 +16,14 @@ public class BookClubCreateRequestDto {
     private String introduction;
 
     @Builder
-    public BookClubCreateRequestDto(String clubName, int capacity, String introduction) {
+    public ClubCreateRequestDto(String clubName, int capacity, String introduction) {
         this.clubName = clubName;
         this.capacity = capacity;
         this.introduction = introduction;
     }
 
-    public BookClub toEntity() {
-        return BookClub.builder()
+    public Club toEntity() {
+        return Club.builder()
                 .user(user)
                 .clubName(clubName)
                 .capacity(capacity)

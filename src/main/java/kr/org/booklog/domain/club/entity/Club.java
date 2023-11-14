@@ -1,4 +1,4 @@
-package kr.org.booklog.domain.bookClub.entity;
+package kr.org.booklog.domain.club.entity;
 
 import kr.org.booklog.domain.user.entity.User;
 import lombok.Builder;
@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Getter
 @NoArgsConstructor
-public class BookClub {
+public class Club {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +33,7 @@ public class BookClub {
     private String introduction;
 
     @Builder
-    public BookClub(User user, String clubName, int capacity, String introduction) {
+    public Club(User user, String clubName, int capacity, String introduction) {
         this.user = user;
         this.clubName = clubName;
         this.capacity = capacity;
