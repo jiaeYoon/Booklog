@@ -1,12 +1,15 @@
 package kr.org.booklog.domain.user.entity;
 
 import kr.org.booklog.config.BaseTimeEntity;
+import kr.org.booklog.domain.memberRegister.MemberRegister;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -34,6 +37,9 @@ public class User extends BaseTimeEntity {
     @NotNull
     private Role role;
 
+    @OneToMany(mappedBy = "user")
+    private List<MemberRegister> memberRegisters = new ArrayList<>();
+
     @Builder
     public User(String name, String nickname, String email, Role role) {
         this.name = name;
@@ -54,5 +60,9 @@ public class User extends BaseTimeEntity {
 
     public String getRoleKey() {
         return this.role.getKey();
+    }
+
+    public void addMemberRegister(MemberRegister memberRegister) {
+        memberRegisters.add(memberRegister);
     }
 }

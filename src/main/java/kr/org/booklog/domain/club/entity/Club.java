@@ -1,13 +1,15 @@
 package kr.org.booklog.domain.club.entity;
 
+import kr.org.booklog.domain.memberRegister.MemberRegister;
 import kr.org.booklog.domain.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Controller;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,6 +24,9 @@ public class Club {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "leader_id")
     private User leader;
+
+    @OneToMany(mappedBy = "club")
+    private List<MemberRegister> memberRegisters = new ArrayList<>();
 
     @NotNull
     private String clubName;
@@ -38,5 +43,9 @@ public class Club {
         this.clubName = clubName;
         this.capacity = capacity;
         this.introduction = introduction;
+    }
+
+    public void addMemberRegister(MemberRegister memberRegister) {
+        this.memberRegisters.add(memberRegister);
     }
 }
