@@ -34,6 +34,7 @@ public class ClubService {
                 .orElseThrow(IllegalArgumentException::new);
         User user = findUser(sessionUser);
 
+        club.checkCapacity();
         MemberRegister memberRegister = MemberRegister.register(club, user);
 
         return memberRegisterRepository.save(memberRegister).getId();

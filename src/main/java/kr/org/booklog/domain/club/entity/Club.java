@@ -2,6 +2,7 @@ package kr.org.booklog.domain.club.entity;
 
 import kr.org.booklog.domain.memberRegister.MemberRegister;
 import kr.org.booklog.domain.user.entity.User;
+import kr.org.booklog.exception.NotEnoughCapacityException;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -51,5 +52,11 @@ public class Club {
     public void addMemberRegister(MemberRegister memberRegister) {
         memberRegisters.add(memberRegister);
         ++memberCount;
+    }
+
+    public void checkCapacity() {
+        if (memberCount + 1 > capacity) {
+            throw new NotEnoughCapacityException("member count is over capacity");
+        }
     }
 }
