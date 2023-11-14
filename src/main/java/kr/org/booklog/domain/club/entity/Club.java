@@ -35,6 +35,9 @@ public class Club {
     private int capacity;
 
     @NotNull
+    private int memberCount = 1;
+
+    @NotNull
     private String introduction;
 
     @Builder
@@ -46,6 +49,7 @@ public class Club {
     }
 
     public void addMemberRegister(MemberRegister memberRegister) {
-        this.memberRegisters.add(memberRegister);
+        memberRegisters.add(memberRegister);
+        ++memberCount;
     }
 }
