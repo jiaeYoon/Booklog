@@ -11,18 +11,22 @@ import kr.org.booklog.domain.user.entity.User;
 import kr.org.booklog.domain.user.repository.UserRepository;
 import kr.org.booklog.exception.NotEnoughCapacityException;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
-@Transactional
 class BookClubServiceTest {
 
     @Autowired UserRepository userRepository;
@@ -32,6 +36,7 @@ class BookClubServiceTest {
     @Autowired ClubService clubService;
 
     @Test
+    @Transactional
     @DisplayName("독서 모임 생성")
     void save() {
 
@@ -61,6 +66,7 @@ class BookClubServiceTest {
     }
 
     @Test
+    @Transactional
     @DisplayName("독서 모임 참가")
     void join() {
 
@@ -85,6 +91,7 @@ class BookClubServiceTest {
     }
 
     @Test
+    @Transactional
     @DisplayName("모임 정원 초과")
     void overcapacity() {
 
@@ -98,6 +105,42 @@ class BookClubServiceTest {
         clubService.join(new SessionUser(member1), clubId);
         assertThatThrownBy(() -> clubService.join(new SessionUser(member2), clubId))
                 .isInstanceOf(NotEnoughCapacityException.class);
+    }
+
+    @RepeatedTest(10)
+    @DisplayName("두 명의 유저가 동시에 가입하여 정원 초과 시, 오류 발생")
+    void joinParallel() throws InterruptedException {
+
+        //given
+        User leader = newUser("leader");
+        User member1 = newUser("member1");
+        User member2 = newUser("member2");
+        List<User> members = new ArrayList<>(List.of(member1, member2));
+
+        Long clubId = newClub(leader, 2);
+
+        //then
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
+        CountDownLatch latch = new CountDownLatch(2);
+
+        //when
+        for (User member: members) {
+            executorService.submit(() -> {
+                try {
+                    clubService.join(new SessionUser(member), clubId);
+                } catch (Exception e) {
+                    assertThat(e.getClass()).isEqualTo(NotEnoughCapacityException.class);
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+
+        latch.await();
+
+        //then
+        Club club = clubRepository.findById(clubId).get();
+        assertThat(club.getMemberCount()).isEqualTo(2);
     }
 
     private Long newClub(User leader, int capacity) {
