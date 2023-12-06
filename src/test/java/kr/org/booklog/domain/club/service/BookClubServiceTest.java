@@ -34,7 +34,8 @@ class BookClubServiceTest {
     void save() {
 
         //given
-        SessionUser sessionUser = new SessionUser(newUser("A"));
+        User user = newUser("A");
+        SessionUser sessionUser = new SessionUser(user);
         ClubCreateRequestDto requestDto = ClubCreateRequestDto.builder()
                 .clubName("추리 소설 클럽")
                 .capacity(4)

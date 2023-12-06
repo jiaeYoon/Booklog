@@ -36,9 +36,9 @@ public class ClubService {
     public Long join(SessionUser sessionUser, Long id) {
         Club club = clubRepository.findById(id)
                 .orElseThrow(IllegalArgumentException::new);
-        User user = findUser(sessionUser);
 
         club.checkCapacity();
+        User user = findUser(sessionUser);
         MemberRegister memberRegister = MemberRegister.register(club, user);
 
         return memberRegisterRepository.save(memberRegister).getId();
