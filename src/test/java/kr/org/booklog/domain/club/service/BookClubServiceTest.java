@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -49,7 +51,13 @@ class BookClubServiceTest {
         Club bookClub = clubRepository.findById(id).get();
         assertThat(bookClub.getClubName()).isEqualTo("추리 소설 클럽");
         assertThat(bookClub.getCapacity()).isEqualTo(4);
+        assertThat(bookClub.getMemberCount()).isEqualTo(1);
         assertThat(bookClub.getLeader().getNickname()).isEqualTo(sessionUser.getNickname());
+
+        List<MemberRegister> memberRegisters = memberRegisterRepository.findByMemberId(user.getId());
+        assertThat(memberRegisters.size()).isEqualTo(1);
+        assertThat(memberRegisters.get(0).getClub()).isEqualTo(bookClub);
+        assertThat(memberRegisters.get(0).getMember().getId()).isEqualTo(user.getId());
     }
 
     @Test
