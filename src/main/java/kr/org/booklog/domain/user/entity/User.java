@@ -37,8 +37,8 @@ public class User extends BaseTimeEntity {
     @NotNull
     private Role role;
 
-    @OneToMany(mappedBy = "user")
-    private List<MemberRegister> memberRegisters = new ArrayList<>();
+    @OneToMany(mappedBy = "member")
+    private final List<MemberRegister> memberRegisters = new ArrayList<>();
 
     @Builder
     public User(String name, String nickname, String email, Role role) {

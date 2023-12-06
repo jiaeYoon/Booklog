@@ -71,7 +71,7 @@ class BookClubServiceTest {
 
         assertThat(user.getMemberRegisters().size()).isEqualTo(1);
         assertThat(memberRegister.getClub().getId()).isEqualTo(clubId);
-        assertThat(memberRegister.getUser().getName()).isEqualTo("B");
+        assertThat(memberRegister.getMember().getName()).isEqualTo("B");
     }
 
     @Test

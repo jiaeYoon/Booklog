@@ -18,26 +18,27 @@ public class MemberRegister {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "member_id")
+    private User member;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "boook_club_id")
     private Club club;
 
     @Builder
-    public MemberRegister(User user, Club club) {
-        this.user = user;
+    public MemberRegister(User member, Club club) {
+        this.member = member;
         this.club = club;
     }
 
-    public static MemberRegister register(Club club, User user) {
+    public static MemberRegister register(Club club, User member) {
+
         MemberRegister memberRegister = new MemberRegister();
         memberRegister.club = club;
-        memberRegister.user = user;
+        memberRegister.member = member;
 
         club.addMemberRegister(memberRegister);
-        user.addMemberRegister(memberRegister);
+        member.addMemberRegister(memberRegister);
 
         return memberRegister;
     }
