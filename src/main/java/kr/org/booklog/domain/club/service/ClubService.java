@@ -25,7 +25,11 @@ public class ClubService {
     public Long save(SessionUser sessionUser, ClubCreateRequestDto requestDto) {
         User user = findUser(sessionUser);
         requestDto.setLeader(user);
-        return clubRepository.save(requestDto.toEntity()).getId();
+        Club club = clubRepository.save(requestDto.toEntity());
+
+        MemberRegister memberRegister = MemberRegister.register(club, user);
+        memberRegisterRepository.save(memberRegister);
+        return club.getId();
     }
 
     @Transactional

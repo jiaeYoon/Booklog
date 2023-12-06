@@ -59,7 +59,7 @@ class BookClubServiceTest {
         User leader = newUser("A");
         User member = newUser("B");
 
-        Long clubId = newClub(leader, 4).getId();
+        Long clubId = newClub(leader, 4);
 
         //when
         Long bookClubMemberId = clubService.join(new SessionUser(member), clubId);
@@ -69,6 +69,7 @@ class BookClubServiceTest {
         Club club = clubRepository.findById(clubId).get();
         User user = userRepository.findById(member.getId()).get();
 
+        assertThat(club.getMemberCount()).isEqualTo(2);
         assertThat(user.getMemberRegisters().size()).isEqualTo(1);
         assertThat(memberRegister.getClub().getId()).isEqualTo(clubId);
         assertThat(memberRegister.getMember().getName()).isEqualTo("B");
@@ -82,7 +83,7 @@ class BookClubServiceTest {
         User leader = newUser("A");
         User member1 = newUser("B");
         User member2 = newUser("C");
-        Long clubId = newClub(leader, 2).getId();
+        Long clubId = newClub(leader, 2);
 
         //when, then
         clubService.join(new SessionUser(member1), clubId);
@@ -90,14 +91,13 @@ class BookClubServiceTest {
                 .isInstanceOf(NotEnoughCapacityException.class);
     }
 
-    private Club newClub(User leader, int capacity) {
-        Club club = Club.builder()
-                .leader(leader)
+    private Long newClub(User leader, int capacity) {
+        ClubCreateRequestDto requestDto = ClubCreateRequestDto.builder()
                 .clubName("추리 소설 클럽")
                 .capacity(capacity)
                 .introduction("소개글")
                 .build();
-        return clubRepository.save(club);
+        return clubService.save(new SessionUser(leader), requestDto);
     }
 
     private User newUser(String name) {

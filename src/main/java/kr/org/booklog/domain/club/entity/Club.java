@@ -27,7 +27,7 @@ public class Club {
     private User leader;
 
     @OneToMany(mappedBy = "club")
-    private List<MemberRegister> memberRegisters = new ArrayList<>();
+    private final List<MemberRegister> memberRegisters = new ArrayList<>();
 
     @NotNull
     private String clubName;
@@ -36,7 +36,7 @@ public class Club {
     private int capacity;
 
     @NotNull
-    private int memberCount = 1;
+    private int memberCount = 0;
 
     @NotNull
     private String introduction;
