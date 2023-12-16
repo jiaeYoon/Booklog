@@ -109,7 +109,7 @@ class BookClubServiceTest {
 
     @RepeatedTest(10)
     @DisplayName("두 명의 유저가 동시에 가입하여 정원 초과 시, 오류 발생")
-    void joinParallel() throws InterruptedException {
+    void 동시_가입_정원_초과() throws InterruptedException {
 
         //given
         User leader = newUser("leader");
@@ -139,8 +139,10 @@ class BookClubServiceTest {
         latch.await();
 
         //then
-        Club club = clubRepository.findById(clubId).get();
+        Club club = clubRepository.findById(clubId).orElseThrow();
         assertThat(club.getMemberCount()).isEqualTo(2);
+        List<MemberRegister> memberRegistersOfClub = memberRegisterRepository.findByClubId(club.getId());
+        assertThat(memberRegistersOfClub.size()).isEqualTo(2);
     }
 
     private Long newClub(User leader, int capacity) {
