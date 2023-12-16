@@ -33,15 +33,15 @@ public class ClubService {
     }
 
     @Transactional
-    public synchronized Long join(SessionUser sessionUser, Long id) {
-        Club club = clubRepository.findById(id)
+    public Long join(SessionUser sessionUser, Long id) {
+        Club club = clubRepository.findByIdWithPessimisticLock(id)
                 .orElseThrow(IllegalArgumentException::new);
 
         club.checkCapacity();
         User user = findUser(sessionUser);
         MemberRegister memberRegister = MemberRegister.register(club, user);
 
-        return memberRegisterRepository.saveAndFlush(memberRegister).getId();
+        return memberRegisterRepository.save(memberRegister).getId();
     }
 
     private User findUser(SessionUser sessionUser) {
