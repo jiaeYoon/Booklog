@@ -2,6 +2,7 @@ package kr.org.booklog.domain.club.service;
 
 import kr.org.booklog.config.auth.dto.SessionUser;
 import kr.org.booklog.domain.club.dto.ClubCreateRequestDto;
+import kr.org.booklog.domain.club.dto.ClubResponseDto;
 import kr.org.booklog.domain.club.entity.Club;
 import kr.org.booklog.domain.club.repository.ClubRepository;
 import kr.org.booklog.domain.memberRegister.MemberRegister;
@@ -143,6 +144,23 @@ class BookClubServiceTest {
         assertThat(club.getMemberCount()).isEqualTo(2);
         List<MemberRegister> memberRegistersOfClub = memberRegisterRepository.findByClubId(club.getId());
         assertThat(memberRegistersOfClub.size()).isEqualTo(2);
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("전체 모임 조회")
+    void findAll() {
+
+        //given
+        User leader = newUser("leader");
+        Long club1 = newClub(leader, 3);
+        Long club2 = newClub(leader, 4);
+
+        //when
+        List<ClubResponseDto> result = clubService.findAll();
+
+        //then
+        assertThat(result.size()).isEqualTo(2);
     }
 
     private Long newClub(User leader, int capacity) {
