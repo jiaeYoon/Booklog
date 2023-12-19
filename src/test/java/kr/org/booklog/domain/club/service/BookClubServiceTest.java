@@ -164,6 +164,28 @@ class BookClubServiceTest {
         assertThat(result.size()).isEqualTo(2);
     }
 
+    @Test
+    @Transactional
+    @DisplayName("개별 모임 조회")
+    void findById() {
+
+        //given
+        User leader = newUser("leader");
+        Long clubId = newClub(leader, 3);
+
+        User member1 = newUser("member1");
+        User member2 = newUser("member2");
+        clubService.join(new SessionUser(member1), clubId);
+        clubService.join(new SessionUser(member2), clubId);
+
+        //when
+        ClubResponseDto result = clubService.findById(clubId);
+
+        //then
+        assertThat(result.getMemberCount()).isEqualTo(3);
+        assertThat(result.getMembers()).contains(leader, member1, member2);
+    }
+
     private Long newClub(User leader, int capacity) {
         ClubCreateRequestDto requestDto = ClubCreateRequestDto.builder()
                 .clubName("추리 소설 클럽")
