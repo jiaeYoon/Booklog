@@ -4,6 +4,7 @@ import kr.org.booklog.config.auth.LoginUser;
 import kr.org.booklog.config.auth.dto.SessionUser;
 import kr.org.booklog.domain.club.dto.ClubCreateRequestDto;
 import kr.org.booklog.domain.club.dto.ClubResponseDto;
+import kr.org.booklog.domain.club.dto.TotalClubResponseDto;
 import kr.org.booklog.domain.club.service.ClubService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -30,7 +31,7 @@ public class ClubController {
     }
 
     @GetMapping("/clubs")
-    public List<ClubResponseDto> findAll() {
+    public List<TotalClubResponseDto> findAll() {
         return clubService.findAll();
     }
 }

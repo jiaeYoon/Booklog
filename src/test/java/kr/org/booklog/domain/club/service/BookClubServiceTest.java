@@ -3,6 +3,7 @@ package kr.org.booklog.domain.club.service;
 import kr.org.booklog.config.auth.dto.SessionUser;
 import kr.org.booklog.domain.club.dto.ClubCreateRequestDto;
 import kr.org.booklog.domain.club.dto.ClubResponseDto;
+import kr.org.booklog.domain.club.dto.TotalClubResponseDto;
 import kr.org.booklog.domain.club.entity.Club;
 import kr.org.booklog.domain.club.repository.ClubRepository;
 import kr.org.booklog.domain.memberRegister.MemberRegister;
@@ -157,7 +158,7 @@ class BookClubServiceTest {
         Long club2 = newClub(leader, 4);
 
         //when
-        List<ClubResponseDto> result = clubService.findAll();
+        List<TotalClubResponseDto> result = clubService.findAll();
 
         //then
         assertThat(result.size()).isEqualTo(2);
