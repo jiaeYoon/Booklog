@@ -3,12 +3,15 @@ package kr.org.booklog.domain.club.controller;
 import kr.org.booklog.config.auth.LoginUser;
 import kr.org.booklog.config.auth.dto.SessionUser;
 import kr.org.booklog.domain.club.dto.ClubCreateRequestDto;
+import kr.org.booklog.domain.club.dto.ClubResponseDto;
 import kr.org.booklog.domain.club.service.ClubService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -24,5 +27,10 @@ public class ClubController {
     @PatchMapping("/clubs/{id}")
     public Long join(@LoginUser SessionUser user, @PathVariable Long id) {
         return clubService.join(user, id);
+    }
+
+    @GetMapping("/clubs")
+    public List<ClubResponseDto> findAll() {
+        return clubService.findAll();
     }
 }
