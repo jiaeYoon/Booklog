@@ -63,4 +63,10 @@ public class ClubService {
 
         return responseDtos;
     }
+
+    public ClubResponseDto findById(Long id) {
+        Club club = clubRepository.findById(id)
+                .orElseThrow(IllegalArgumentException::new);
+        return new ClubResponseDto(club);
+    }
 }

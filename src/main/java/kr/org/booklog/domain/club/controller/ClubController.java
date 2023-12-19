@@ -34,4 +34,9 @@ public class ClubController {
     public List<TotalClubResponseDto> findAll() {
         return clubService.findAll();
     }
+
+    @GetMapping("/clubs/{id}")
+    public ClubResponseDto findById(@PathVariable("id") Long id) {
+        return clubService.findById(id);
+    }
 }
