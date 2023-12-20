@@ -30,7 +30,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
-class BookClubServiceTest {
+class ClubServiceTest {
 
     @Autowired UserRepository userRepository;
     @Autowired MemberRegisterRepository memberRegisterRepository;
