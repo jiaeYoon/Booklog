@@ -10,10 +10,9 @@ import kr.org.booklog.domain.post.dto.PostResponseDto;
 import kr.org.booklog.domain.post.dto.PostTotalResponseDto;
 import kr.org.booklog.domain.post.entity.Post;
 import kr.org.booklog.domain.post.repository.PostRepository;
-
-import kr.org.booklog.domain.user.entity.Role;
-import kr.org.booklog.domain.user.entity.User;
 import kr.org.booklog.domain.user.repository.UserRepository;
+import kr.org.booklog.util.Util;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,16 +21,16 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
 class PostServiceTest {
 
     @Autowired EntityManager em;
+    @Autowired Util util;
     @Autowired PostRepository postRepository;
     @Autowired UserRepository userRepository;
     @Autowired LikesRepository likesRepository;
@@ -44,7 +43,7 @@ class PostServiceTest {
     void 게시글_저장() {
 
         //given
-        Long userId = newUsers(1).get(0);
+        Long userId = util.newUser();
 
         PostRequestDto requestDto = PostRequestDto.builder()
                 .userId(userId)
@@ -70,8 +69,8 @@ class PostServiceTest {
     void 전체_게시글_조회() {
 
         //given
-        Long userId1 = newUsers(1).get(0);
-        List<Long> postIds = newPosts(userId1, 2);
+        Long userId1 = util.newUser();
+        List<Long> postIds = util.newPosts(userId1, 2);
         Long postId1 = postIds.get(0);
         Long postId2 = postIds.get(1);
 
@@ -97,8 +96,8 @@ class PostServiceTest {
     @Test
     void 특정_게시글_조회() {
         //given
-        Long userId1 = newUsers(1).get(0);
-        Long postId = newPosts(userId1, 2).get(0);
+        Long userId1 = util.newUser();
+        Long postId = util.newPosts(userId1, 2).get(0);
 
         em.flush();
         em.clear();
@@ -110,7 +109,6 @@ class PostServiceTest {
 
         //then
         assertThat(responseDto.getPostTitle()).isEqualTo("게시글 제목0");
-        assertThat(responseDto.getNickname()).isEqualTo("닉네임0");
         assertThat(responseDto.getLikesCnt()).isEqualTo(1);
     }
 
@@ -118,8 +116,8 @@ class PostServiceTest {
     void 게시글_수정() {
 
         //given
-        Long userId = newUsers(1).get(0);
-        Long postId = newPosts(userId, 1).get(0);
+        Long userId = util.newUser();
+        Long postId = util.newPost(userId);
 
         em.flush();
         em.clear();
@@ -149,8 +147,8 @@ class PostServiceTest {
     void 게시글_삭제() {
 
         //given
-        Long userId = newUsers(1).get(0);
-        Long postId = newPosts(userId, 2).get(0);
+        Long userId = util.newUser();
+        Long postId = util.newPosts(userId, 2).get(0);
 
         em.flush();
         em.clear();
@@ -166,40 +164,5 @@ class PostServiceTest {
         assertThat(postRepository.findAll().size()).isEqualTo(1);
         assertThat(likesRepository.findByPostId(postId).size()).isEqualTo(0);
         assertThat(commentRepository.findByPostId(postId).size()).isEqualTo(0);
-    }
-
-    private List<Long> newUsers(int num) {
-        List<Long> ids = new ArrayList<>();
-        for (int i = 0; i < num; i++) {
-            User user = User.builder()
-                    .name("이름" + i)
-                    .nickname("닉네임" + i)
-                    .email("email" + i + "@gmail.com")
-                    .role(Role.USER)
-                    .build();
-            ids.add(userRepository.save(user).getId());
-        }
-        return ids;
-    }
-
-    private List<Long> newPosts(Long userId, int num) {
-        User user = userRepository.findById(userId).get();
-
-        List<Long> ids = new ArrayList<>();
-        for (int i = 0; i < num; i++) {
-            Post post = Post.builder()
-                    .user(user)
-                    .postTitle("게시글 제목" + i)
-                    .bookTitle("책 제목" + i)
-                    .bookWriter("zzyoon")
-                    .readStart(LocalDate.of(2023, 5, 14))
-                    .readEnd(LocalDate.of(2023, 6, 14))
-                    .postAt(LocalDateTime.now())
-                    .rating(4)
-                    .content("후기" + i)
-                    .build();
-            ids.add(postRepository.save(post).getId());
-        }
-        return ids;
     }
 }

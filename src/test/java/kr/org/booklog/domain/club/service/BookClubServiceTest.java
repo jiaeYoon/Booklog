@@ -8,10 +8,11 @@ import kr.org.booklog.domain.club.entity.Club;
 import kr.org.booklog.domain.club.repository.ClubRepository;
 import kr.org.booklog.domain.memberRegister.MemberRegister;
 import kr.org.booklog.domain.memberRegister.MemberRegisterRepository;
-import kr.org.booklog.domain.user.entity.Role;
 import kr.org.booklog.domain.user.entity.User;
 import kr.org.booklog.domain.user.repository.UserRepository;
 import kr.org.booklog.exception.NotEnoughCapacityException;
+import kr.org.booklog.util.Util;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
@@ -37,13 +38,15 @@ class BookClubServiceTest {
     @Autowired ClubRepository clubRepository;
     @Autowired ClubService clubService;
 
+    @Autowired Util util;
+
     @Test
     @Transactional
     @DisplayName("독서 모임 생성")
     void create() {
 
         //given
-        User user = newUser("A");
+        User user = util.newUser("A");
         SessionUser sessionUser = new SessionUser(user);
         ClubCreateRequestDto requestDto = ClubCreateRequestDto.builder()
                 .clubName("추리 소설 클럽")
@@ -73,10 +76,10 @@ class BookClubServiceTest {
     void join() {
 
         //given
-        User leader = newUser("A");
-        User member = newUser("B");
+        User leader = util.newUser("A");
+        User member = util.newUser("B");
 
-        Long clubId = newClub(leader, 4);
+        Long clubId = util.newClub(leader, 4);
 
         //when
         Long bookClubMemberId = clubService.join(new SessionUser(member), clubId);
@@ -98,10 +101,10 @@ class BookClubServiceTest {
     void overcapacity() {
 
         //given
-        User leader = newUser("A");
-        User member1 = newUser("B");
-        User member2 = newUser("C");
-        Long clubId = newClub(leader, 2);
+        User leader = util.newUser("A");
+        User member1 = util.newUser("B");
+        User member2 = util.newUser("C");
+        Long clubId = util.newClub(leader, 2);
 
         //when, then
         clubService.join(new SessionUser(member1), clubId);
@@ -114,12 +117,12 @@ class BookClubServiceTest {
     void 동시_가입_정원_초과() throws InterruptedException {
 
         //given
-        User leader = newUser("leader");
-        User member1 = newUser("member1");
-        User member2 = newUser("member2");
+        User leader = util.newUser("leader");
+        User member1 = util.newUser("member1");
+        User member2 = util.newUser("member2");
         List<User> members = new ArrayList<>(List.of(member1, member2));
 
-        Long clubId = newClub(leader, 2);
+        Long clubId = util.newClub(leader, 2);
 
         //then
         ExecutorService executorService = Executors.newFixedThreadPool(2);
@@ -153,9 +156,9 @@ class BookClubServiceTest {
     void findAll() {
 
         //given
-        User leader = newUser("leader");
-        Long club1 = newClub(leader, 3);
-        Long club2 = newClub(leader, 4);
+        User leader = util.newUser("leader");
+        Long club1 = util.newClub(leader, 3);
+        Long club2 = util.newClub(leader, 4);
 
         //when
         List<TotalClubResponseDto> result = clubService.findAll();
@@ -170,11 +173,11 @@ class BookClubServiceTest {
     void findById() {
 
         //given
-        User leader = newUser("leader");
-        Long clubId = newClub(leader, 3);
+        User leader = util.newUser("leader");
+        Long clubId = util.newClub(leader, 3);
 
-        User member1 = newUser("member1");
-        User member2 = newUser("member2");
+        User member1 = util.newUser("member1");
+        User member2 = util.newUser("member2");
         clubService.join(new SessionUser(member1), clubId);
         clubService.join(new SessionUser(member2), clubId);
 
@@ -184,25 +187,5 @@ class BookClubServiceTest {
         //then
         assertThat(result.getMemberCount()).isEqualTo(3);
         assertThat(result.getMembers()).contains(leader, member1, member2);
-    }
-
-    private Long newClub(User leader, int capacity) {
-        ClubCreateRequestDto requestDto = ClubCreateRequestDto.builder()
-                .clubName("추리 소설 클럽")
-                .capacity(capacity)
-                .introduction("소개글")
-                .build();
-        return clubService.save(new SessionUser(leader), requestDto);
-    }
-
-    private User newUser(String name) {
-        User user = User.builder()
-                .name(name)
-                .nickname("닉네임" + name)
-                .email(name + "@gmail.com")
-                .role(Role.USER)
-                .build();
-        userRepository.save(user);
-        return user;
     }
 }
