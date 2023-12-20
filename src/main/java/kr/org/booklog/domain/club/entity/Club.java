@@ -59,4 +59,12 @@ public class Club {
             throw new NotEnoughCapacityException("member count is over capacity");
         }
     }
+
+    public List<User> getMembers() {
+        List<User> members = new ArrayList<>();
+        for (MemberRegister memberRegister : memberRegisters) {
+            members.add(memberRegister.getMember());
+        }
+        return members;
+    }
 }
