@@ -40,7 +40,7 @@ class BookClubServiceTest {
     @Test
     @Transactional
     @DisplayName("독서 모임 생성")
-    void save() {
+    void create() {
 
         //given
         User user = newUser("A");
@@ -52,7 +52,7 @@ class BookClubServiceTest {
                 .build();
 
         //when
-        Long id = clubService.save(sessionUser, requestDto);
+        Long id = clubService.create(sessionUser, requestDto);
 
         //then
         Club bookClub = clubRepository.findById(id).get();

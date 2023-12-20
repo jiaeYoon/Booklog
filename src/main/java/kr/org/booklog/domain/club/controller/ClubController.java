@@ -22,7 +22,7 @@ public class ClubController {
 
     @PostMapping("/clubs")
     public Long create(@LoginUser SessionUser user, ClubCreateRequestDto requestDto) {
-        return clubService.save(user, requestDto);
+        return clubService.create(user, requestDto);
     }
 
     @PatchMapping("/clubs/{id}")
