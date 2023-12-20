@@ -1,6 +1,7 @@
 package kr.org.booklog.domain.user.service;
 
 import kr.org.booklog.config.auth.dto.SessionUser;
+import kr.org.booklog.domain.user.dto.JoinedClubResponseDto;
 import kr.org.booklog.domain.user.entity.User;
 import kr.org.booklog.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Transactional
 @Service
@@ -38,5 +40,11 @@ public class UserService {
         SessionUser sessionUser = new SessionUser(findById(guestId));
         httpSession.setAttribute("user", sessionUser);
         return guestId;
+    }
+
+    public List<JoinedClubResponseDto> findJoinClubs(SessionUser sessionUser) {
+        User user = userRepository.findById(sessionUser.getId())
+                .orElseThrow(IllegalArgumentException::new);
+        return user.getJoinedClubs();
     }
 }

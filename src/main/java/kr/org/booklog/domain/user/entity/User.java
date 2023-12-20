@@ -2,6 +2,7 @@ package kr.org.booklog.domain.user.entity;
 
 import kr.org.booklog.config.BaseTimeEntity;
 import kr.org.booklog.domain.memberRegister.MemberRegister;
+import kr.org.booklog.domain.user.dto.JoinedClubResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -64,5 +65,13 @@ public class User extends BaseTimeEntity {
 
     public void addMemberRegister(MemberRegister memberRegister) {
         memberRegisters.add(memberRegister);
+    }
+
+    public List<JoinedClubResponseDto> getJoinedClubs() {
+        List<JoinedClubResponseDto> clubs = new ArrayList<>();
+        for (MemberRegister memberRegister : memberRegisters) {
+            clubs.add(new JoinedClubResponseDto(memberRegister.getClub()));
+        }
+        return clubs;
     }
 }

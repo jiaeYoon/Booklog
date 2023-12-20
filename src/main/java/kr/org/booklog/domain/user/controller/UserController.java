@@ -2,13 +2,18 @@ package kr.org.booklog.domain.user.controller;
 
 import kr.org.booklog.config.auth.LoginUser;
 import kr.org.booklog.config.auth.dto.SessionUser;
+import kr.org.booklog.domain.user.dto.JoinedClubResponseDto;
 import kr.org.booklog.domain.user.dto.SetNicknameForm;
 import kr.org.booklog.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.servlet.view.RedirectView;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -32,5 +37,10 @@ public class UserController {
         userService.reloadSessionUserInfo(sessionUser);
 
         return new RedirectView("/home");
+    }
+
+    @GetMapping("/users/joined")
+    public List<JoinedClubResponseDto> findJoinClubs(@LoginUser SessionUser sessionUser) {
+        return userService.findJoinClubs(sessionUser);
     }
 }
