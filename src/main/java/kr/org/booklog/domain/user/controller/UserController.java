@@ -21,7 +21,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @PutMapping("/users/update")
+    @PutMapping("/users")
     public RedirectView updateUserInfo(@LoginUser SessionUser sessionUser, SetNicknameForm nicknameForm, BindingResult result) {
 
         String nickname = nicknameForm.getNickname();
@@ -39,7 +39,7 @@ public class UserController {
         return new RedirectView("/home");
     }
 
-    @GetMapping("/users/joined")
+    @GetMapping("/users/clubs")
     public List<JoinedClubResponseDto> findJoinClubs(@LoginUser SessionUser sessionUser) {
         return userService.findJoinClubs(sessionUser);
     }

@@ -18,7 +18,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <form method="post" th:action="|@{/users/update}|" th:object="${nicknameForm}">
+                        <form method="post" th:action="|@{/users}|" th:object="${nicknameForm}">
                             <input name="_method" type="hidden" value="put"/>
                             <div class="mb-3">
                                 <label class="col-form-label" th:for="nickname">Booklog에서 사용할 닉네임을 설정해주세요!</label>
