@@ -25,7 +25,7 @@ public class ClubController {
         return clubService.create(user, requestDto);
     }
 
-    @PatchMapping("/clubs/{id}")
+    @PostMapping("/clubs/{id}/join")
     public Long join(@LoginUser SessionUser user, @PathVariable Long id) {
         return clubService.join(user, id);
     }
