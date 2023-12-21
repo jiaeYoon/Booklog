@@ -31,7 +31,7 @@ public class PostService {
     @Transactional
     public Long save(PostRequestDto requestDto) {
         User user = userRepository.findById(requestDto.getUserId())
-                .orElseThrow(() -> new NoSuchElementException());
+                .orElseThrow(NoSuchElementException::new);
         requestDto.setUser(user);
         return postRepository.save(requestDto.toEntity()).getId();
     }

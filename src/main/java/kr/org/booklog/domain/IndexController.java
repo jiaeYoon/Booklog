@@ -5,7 +5,6 @@ import kr.org.booklog.config.auth.dto.SessionUser;
 import kr.org.booklog.domain.post.dto.PostTotalResponseDto;
 import kr.org.booklog.domain.post.service.PostService;
 import kr.org.booklog.domain.user.dto.SetNicknameForm;
-import kr.org.booklog.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +16,6 @@ import java.util.List;
 @Controller
 public class IndexController {
 
-    private final UserService userService;
     private final PostService postService;
 
     @GetMapping("/")

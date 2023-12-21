@@ -2,7 +2,6 @@ package kr.org.booklog.config.auth.dto;
 
 import kr.org.booklog.domain.user.entity.User;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.io.Serializable;
 
