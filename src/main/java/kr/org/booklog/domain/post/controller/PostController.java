@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 
+import static kr.org.booklog.config.guest.GuestInfo.guestId;
+
 //@RequestMapping("/api/v1")
 @Controller
 @RequiredArgsConstructor
@@ -57,7 +59,10 @@ public class PostController {
     @GetMapping("/posts/{id}")
     public String findById(@LoginUser SessionUser user, @PathVariable Long id, Model model) {
 
-        Long userId = user.getId();
+        Long userId = guestId;
+        if (user != null) {
+             userId = user.getId();
+        }
         PostResponseDto post = postService.findById(id, userId);
         model.addAttribute("userId", userId);
         model.addAttribute("post_", post);

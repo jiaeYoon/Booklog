@@ -36,6 +36,15 @@ public class PostService {
         return postRepository.save(requestDto.toEntity()).getId();
     }
 
+    public List<PostTotalResponseDto> findAll() {
+
+        List<PostTotalResponseDto> dtos = new ArrayList<>();
+        List<Post> posts = postRepository.findAllPosts();
+        posts.forEach(post -> dtos.add(new PostTotalResponseDto(post, false)));
+
+        return dtos;
+    }
+
     public List<PostTotalResponseDto> findAll(Long userId) {
 
         List<PostTotalResponseDto> dtos = new ArrayList<>();

@@ -35,13 +35,6 @@ public class UserService {
         httpSession.setAttribute("user", sessionUser);
     }
 
-    public Long setGuestSession() {
-        Long guestId = 164L;
-        SessionUser sessionUser = new SessionUser(findById(guestId));
-        httpSession.setAttribute("user", sessionUser);
-        return guestId;
-    }
-
     public List<JoinedClubResponseDto> findJoinClubs(SessionUser sessionUser) {
         User user = userRepository.findById(sessionUser.getId())
                 .orElseThrow(IllegalArgumentException::new);

@@ -35,8 +35,7 @@ public class IndexController {
         List<PostTotalResponseDto> posts;
 
         if (user == null) {
-            Long guestId = userService.setGuestSession();
-            posts = postService.findAll(guestId);
+            posts = postService.findAll();
         } else {
             boolean setNickname = user.getNickname() == null || user.getNickname().equals("");
             posts = postService.findAll(user.getId());
