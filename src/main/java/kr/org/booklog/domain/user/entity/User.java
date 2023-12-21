@@ -54,7 +54,7 @@ public class User extends BaseTimeEntity {
         return this;
     }
 
-    public void addInfo(String nickname) {
+    public void addNicknameAndGrantRole(String nickname) {
         this.nickname = nickname;
         this.role = Role.USER;
     }

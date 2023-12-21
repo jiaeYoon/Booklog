@@ -27,7 +27,7 @@ public class UserService {
     public void updateUserInfo(Long userId, String nickname) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 id값을 가지는 사용자가 없습니다."));
-        user.addInfo(nickname);
+        user.addNicknameAndGrantRole(nickname);
     }
 
     public void reloadSessionUserInfo(SessionUser sessionUser) {
