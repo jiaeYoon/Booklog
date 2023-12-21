@@ -26,7 +26,6 @@ public class User extends BaseTimeEntity {
     @Column(columnDefinition = "varchar(30)")
     private String name;
 
-    @NotNull
     @Column(columnDefinition = "varchar(30)")
     private String nickname;
 
