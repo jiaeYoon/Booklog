@@ -23,7 +23,6 @@ public class SecurityConfig {
                     .antMatchers("/h2-console/**").hasRole("ADMIN")
                     .antMatchers("/posts/save").authenticated()
                     .antMatchers("/home", "/posts/{id}").permitAll()
-                    .antMatchers("/**").hasRole("USER")
                     .anyRequest().authenticated()
                 .and()
                     .logout()
